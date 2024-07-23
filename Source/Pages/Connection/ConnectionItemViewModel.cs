@@ -9,6 +9,11 @@ public sealed class ConnectionItemViewModel : BaseViewModel
 {
     string _name = string.Empty;
 
+    public ConnectionItemViewModel()
+    {
+
+    }
+
     public ConnectionItemViewModel(ConnectionPageViewModel ownerPage)
     {
         OwnerPage = ownerPage ?? throw new ArgumentNullException(nameof(ownerPage));

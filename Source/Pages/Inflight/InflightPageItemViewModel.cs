@@ -8,6 +8,10 @@ namespace mqttMultimeter.Pages.Inflight;
 
 public sealed class InflightPageItemViewModel
 {
+    public InflightPageItemViewModel()
+    {
+        
+    }
     public InflightPageItemViewModel(MqttApplicationMessage message)
     {
         Message = message ?? throw new ArgumentNullException(nameof(message));

@@ -10,7 +10,7 @@
         <publish:PublishItemViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,2*,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto">
 
         <Grid Grid.Row="0"
               ColumnDefinitions="*,Auto">

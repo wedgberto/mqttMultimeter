@@ -19,6 +19,12 @@ public sealed class PublishItemViewModel : BaseViewModel
     string? _topic;
     ushort _topicAlias;
 
+    public PublishItemViewModel()
+    {
+        Topic = "Preview";
+        Payload = "Demo Payload";
+    }
+
     public PublishItemViewModel(PublishPageViewModel ownerPage)
     {
         OwnerPage = ownerPage ?? throw new ArgumentNullException(nameof(ownerPage));

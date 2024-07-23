@@ -14,6 +14,18 @@ public sealed class PublishPageViewModel : BasePageViewModel
 {
     readonly MqttClientService _mqttClientService;
 
+    public PublishPageViewModel()
+    {
+        var item = new PublishItemViewModel(this)
+        {
+            Name = "Preview",
+            Topic = "preview/topic1",
+            Payload = "{\"value\": 1.0}",
+        };
+        Items.Collection.Add(item);
+        Items.SelectedItem = item; 
+    }
+
     public PublishPageViewModel(MqttClientService mqttClientService, StateService stateService)
     {
         _mqttClientService = mqttClientService ?? throw new ArgumentNullException(nameof(mqttClientService));

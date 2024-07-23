@@ -29,6 +29,11 @@ public sealed class TopicExplorerPageViewModel : BasePageViewModel
     TopicExplorerTreeNodeViewModel? _selectedNode;
     bool _trackLatestMessageOnly;
 
+    public TopicExplorerPageViewModel()
+    {
+
+    }
+
     public TopicExplorerPageViewModel(MqttClientService mqttClientService)
     {
         if (mqttClientService == null)

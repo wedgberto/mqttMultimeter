@@ -3,6 +3,7 @@
 public sealed class LogItemViewModel
 {
     public string? Exception { get; set; }
+
     public bool IsError { get; set; }
 
     public bool IsInformation { get; set; }

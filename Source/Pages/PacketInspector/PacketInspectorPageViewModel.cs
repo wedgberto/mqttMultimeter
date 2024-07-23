@@ -15,6 +15,21 @@ public sealed class PacketInspectorPageViewModel : BasePageViewModel
     int _number;
     PacketViewModel? _selectedPacket;
 
+    public PacketInspectorPageViewModel()
+    {
+        var packet = new PacketViewModel()
+        {
+            IsInbound = true,
+            Length = 1,
+            Data = new byte[] { 0x20 },
+            Number = 1,
+            Type = "Preview"
+
+        };
+        Packets.Add(packet);
+        SelectedPacket = packet;
+    }
+
     public PacketInspectorPageViewModel(MqttClientService mqttClientService)
     {
         if (mqttClientService == null)

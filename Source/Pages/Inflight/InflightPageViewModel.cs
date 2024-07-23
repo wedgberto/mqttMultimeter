@@ -31,6 +31,11 @@ public sealed class InflightPageViewModel : BasePageViewModel
 
     InflightPageItemViewModel? _selectedItem;
 
+    public InflightPageViewModel()
+    {
+
+    }
+
     public InflightPageViewModel(MqttClientService mqttClientService, InflightPageItemExportService exportService)
     {
         _mqttClientService = mqttClientService ?? throw new ArgumentNullException(nameof(mqttClientService));

@@ -18,6 +18,11 @@ public sealed class ConnectionPageViewModel : BasePageViewModel
     bool _isConnected;
     bool _isConnecting;
 
+    public ConnectionPageViewModel()
+    {
+        this.AddItem();
+    }
+
     public ConnectionPageViewModel(MqttClientService mqttClientService, StateService stateService)
     {
         _mqttClientService = mqttClientService ?? throw new ArgumentNullException(nameof(mqttClientService));

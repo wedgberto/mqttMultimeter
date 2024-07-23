@@ -12,6 +12,11 @@ public sealed class SubscriptionsPageViewModel : BasePageViewModel
 {
     readonly MqttClientService _mqttClientService;
 
+    public SubscriptionsPageViewModel()
+    {
+
+    }
+
     public SubscriptionsPageViewModel(MqttClientService mqttClientService, StateService stateService)
     {
         _mqttClientService = mqttClientService ?? throw new ArgumentNullException(nameof(mqttClientService));

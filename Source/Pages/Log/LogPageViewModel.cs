@@ -12,6 +12,11 @@ public sealed class LogPageViewModel : BasePageViewModel
 {
     bool _isRecordingEnabled;
 
+    public LogPageViewModel()
+    {
+
+    }
+
     public LogPageViewModel(MqttClientService mqttClientService)
     {
         var mqttClientService1 = mqttClientService ?? throw new ArgumentNullException(nameof(mqttClientService));

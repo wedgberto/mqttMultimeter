@@ -16,6 +16,11 @@ public sealed class InfoPageViewModel : BasePageViewModel
     bool _isUpdateAvailable;
     string _latestAppVersion = string.Empty;
 
+    public InfoPageViewModel()
+    {
+
+    }
+
     public InfoPageViewModel(AppUpdateService appUpdateService)
     {
         _appUpdateService = appUpdateService ?? throw new ArgumentNullException(nameof(appUpdateService));
