@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:mqttMultimeter.Controls"
+             Design.Width="800"
+             Design.Height="450"
+             x:Class="mqttMultimeter.Controls.SignalGeneratorTypeSelectorView">
+  <Design.DataContext>
+    <controls:SignalGeneratorTypeSelectorViewModel />
+  </Design.DataContext>
+
+  <StackPanel Orientation="Horizontal">
+    <CheckBox Content="Heartbeat"
+              Classes="radio-button"
+              IsChecked="{Binding Path=IsHeartbeat, Mode=TwoWay}" />
+    <CheckBox Content="Sine"
+              Classes="radio-button"
+              IsChecked="{Binding Path=IsSine, Mode=TwoWay}" />
+    <CheckBox Content="Sawtooth"
+              Classes="radio-button"
+              IsChecked="{Binding Path=IsSawtooth, Mode=TwoWay}" />
+    <CheckBox Content="Triangle"
+              Classes="radio-button"
+              IsChecked="{Binding Path=IsTriangle, Mode=TwoWay}" />
+    <CheckBox Content="Random"
+              Classes="radio-button"
+              IsChecked="{Binding Path=IsRandom, Mode=TwoWay}" />
+    <CheckBox Content="Weighted Random"
+              Classes="radio-button"
+              IsChecked="{Binding Path=IsWeightedRandom, Mode=TwoWay}" />
+  </StackPanel>
+</UserControl>

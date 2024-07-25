@@ -20,6 +20,7 @@
     <Style Selector="CheckBox.radio-button">
         <Setter Property="CornerRadius"
                 Value="50" />
+      <Setter Property="Padding" Value="5,0,10,0"/>
     </Style>
     
 </Styles>

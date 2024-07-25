@@ -80,7 +80,17 @@
                     Value="0,5,20,5" />
         </Style>
 
-        <Style Selector=":is(Control).value">
+      <Style Selector="Label.disabled">
+        <Setter Property="Foreground"
+                Value="Gray"/>
+      </Style>
+
+      <Style Selector="TextBlock.disabled">
+        <Setter Property="Foreground"
+                Value="Gray"/>
+      </Style>
+
+      <Style Selector=":is(Control).value">
             <Setter Property="Margin"
                     Value="0,5,0,5" />
         </Style>

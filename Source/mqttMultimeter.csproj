@@ -47,6 +47,9 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Update="Controls\SignalGeneratorType\SignalGeneratorTypeSelectorView.axaml.cs">
+          <DependentUpon>SignalGeneratorTypeSelectorView.axaml</DependentUpon>
+        </Compile>
         <Compile Update="Main\MainView.axaml.cs">
             <DependentUpon>MainWindowView.axaml</DependentUpon>
         </Compile>
