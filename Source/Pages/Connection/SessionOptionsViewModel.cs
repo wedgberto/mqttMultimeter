@@ -14,6 +14,7 @@ public sealed class SessionOptionsViewModel : BaseViewModel
     bool _cleanSession = true;
     string _clientId = string.Empty;
     int _keepAliveInterval = 10;
+    string _keyPath = string.Empty;
     string _password = string.Empty;
     bool _requestProblemInformation;
     bool _requestResponseInformation;
@@ -60,6 +61,12 @@ public sealed class SessionOptionsViewModel : BaseViewModel
     {
         get => _clientId;
         set => this.RaiseAndSetIfChanged(ref _clientId, value);
+    }
+
+    public string KeyPath
+    {
+        get => _keyPath;
+        set => this.RaiseAndSetIfChanged(ref _keyPath, value);
     }
 
     public int KeepAliveInterval

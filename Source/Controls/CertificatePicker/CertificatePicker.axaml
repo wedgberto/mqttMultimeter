@@ -12,10 +12,13 @@
                     <Grid ColumnDefinitions="*,Auto">
 
                         <!-- The status text -->
-                        <TextBlock Text="No certificate selected"
-                                   Grid.Column="0"
+                        <TextBlock Grid.Column="0"
                                    IsVisible="{Binding !IsCertificateSelected, RelativeSource={RelativeSource TemplatedParent}}"
-                                   Foreground="Orange" />
+                                   Foreground="Orange" >
+                            <Run>No</Run>
+                            <Run Text="{TemplateBinding PickerType}"/>
+                            <Run>selected</Run>
+                        </TextBlock>
 
                         <TextBlock Grid.Column="0"
                                    ToolTip.Tip="{TemplateBinding Path}"
@@ -25,8 +28,13 @@
                         <!-- The select button -->
                         <Button Margin="10,0,0,0"
                                 x:Name="PART_PickButton"
-                                Grid.Column="1"
-                                Content="Select certificate file" />
+                                Grid.Column="1">
+                            <TextBlock>
+                                <Run>Select</Run>
+                                <Run Text="{TemplateBinding PickerType}"/>
+                                <Run>file</Run>
+                            </TextBlock>
+                        </Button>
                     </Grid>
                 </Border>
             </ControlTemplate>

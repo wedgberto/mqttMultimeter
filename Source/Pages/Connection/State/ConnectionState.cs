@@ -18,6 +18,8 @@ public sealed class ConnectionState
     public bool IgnoreCertificateErrors { get; set; }
 
     public int KeepAliveInterval { get; set; }
+    
+    public string? KeyPath { get; set; }
 
     public string? Name { get; set; }
 

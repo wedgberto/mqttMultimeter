@@ -197,6 +197,7 @@
                            Classes="caption"
                            Content="Certificate" />
                     <controls:CertificatePicker Grid.Column="1"
+                                                PickerType="certificate"
                                                 Path="{Binding SessionOptions.CertificatePath}" />
 
                     <Label Grid.Column="3"
@@ -214,6 +215,14 @@
                     <CheckBox Grid.Column="1"
                               IsChecked="{Binding  SessionOptions.SaveCertificatePassword, Mode=TwoWay}"
                               ToolTip.Tip="The password will be stored in clear text on this computer when activated!" />
+
+                    <Label Grid.Column="3"
+                           Classes="caption"
+                           Content="Key Path" />
+                    <controls:CertificatePicker Grid.Column="4"
+                                                PickerType="key"
+                                                Path="{Binding SessionOptions.KeyPath, Mode=TwoWay}" />
+
                 </controls:AutoGrid>
             </Expander>
 

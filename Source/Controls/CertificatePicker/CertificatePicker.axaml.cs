@@ -14,6 +14,9 @@ public sealed class CertificatePicker : TemplatedControl
     public static readonly StyledProperty<string> PathProperty =
         AvaloniaProperty.Register<CertificatePicker, string>(nameof(Path), string.Empty, defaultBindingMode: BindingMode.TwoWay);
 
+    public static readonly StyledProperty<string> PickerTypeProperty =
+        AvaloniaProperty.Register<CertificatePicker, string>(nameof(PickerType), string.Empty, defaultBindingMode: BindingMode.TwoWay);
+
     public static readonly StyledProperty<bool> IsCertificateSelectedProperty = AvaloniaProperty.Register<CertificatePicker, bool>(nameof(IsCertificateSelected));
 
     Button? _pickButton;
@@ -28,6 +31,12 @@ public sealed class CertificatePicker : TemplatedControl
     {
         get => GetValue(PathProperty);
         set => SetValue(PathProperty, value);
+    }
+
+    public string PickerType
+    {
+        get => GetValue(PickerTypeProperty);
+        set => SetValue(PickerTypeProperty, value);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

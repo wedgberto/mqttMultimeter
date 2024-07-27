@@ -72,9 +72,10 @@ public static class ConnectionPageStateLoader
                 AuthenticationMethod = state.AuthenticationMethod ?? string.Empty,
                 CertificatePath = state.CertificatePath ?? string.Empty,
                 CertificatePassword = state.CertificatePassword ?? string.Empty,
-
+                KeyPath = state.KeyPath ?? string.Empty,
                 // If there was a password saved in the state we assume that it should be saved (also in the future).
                 SaveCertificatePassword = !string.IsNullOrEmpty(state.CertificatePassword)
+
             }
         };
 

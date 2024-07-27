@@ -28,7 +28,8 @@ public static class ConnectionPageStateFactory
                 Transport = item.ServerOptions.SelectedTransport.Value,
                 TlsVersion = item.ServerOptions.SelectedTlsVersion.Value,
                 IgnoreCertificateErrors = item.ServerOptions.IgnoreCertificateErrors,
-                CertificatePath = item.SessionOptions.CertificatePath
+                CertificatePath = item.SessionOptions.CertificatePath,
+                KeyPath = item.SessionOptions.KeyPath
             };
 
             if (item.SessionOptions.SaveCertificatePassword)
