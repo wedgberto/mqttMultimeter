@@ -206,7 +206,7 @@
             <TextBox Grid.Column="1"
                      Grid.Row="1"
                      Classes="value code_text"
-                     Text="{CompiledBinding Interval, Mode=TwoWay}" />
+                     Text="{Binding Path=SignalGeneratorInterval, Mode=TwoWay}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="3"
                        Classes="note">The interval between each generated value.</TextBlock>
@@ -220,9 +220,9 @@
                      Grid.Column="1"
                      HorizontalAlignment="Center"
                    Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
-                     Text="{CompiledBinding Min}"
+                     Text="{CompiledBinding SignalGeneratorMin}"
                      VerticalAlignment="Top"/>
-            <Slider Value="{CompiledBinding Min}"
+            <Slider Value="{CompiledBinding SignalGeneratorMin}"
                     Minimum="-32767"
                     Maximum="32767"
                     IsEnabled="{CompiledBinding !SignalGeneratorType.IsHeartbeat}"
@@ -242,9 +242,9 @@
                      Grid.Column="1"
                      HorizontalAlignment="Center"
                      Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
-                     Text="{CompiledBinding Max}"
+                     Text="{CompiledBinding SignalGeneratorMax}"
                      VerticalAlignment="Top"/>
-            <Slider Value="{CompiledBinding Max}"
+            <Slider Value="{CompiledBinding SignalGeneratorMax}"
                     Minimum="-32767"
                     Maximum="32767"
                     IsEnabled="{CompiledBinding !SignalGeneratorType.IsHeartbeat}"
@@ -264,7 +264,7 @@
                      Grid.Row="4"
                      Classes="value code_text"
                     IsEnabled="{CompiledBinding !SignalGeneratorType.IsHeartbeat}"
-                     Text="{CompiledBinding Period, Mode=TwoWay}" />
+                     Text="{CompiledBinding SignalGeneratorPeriod, Mode=TwoWay}" />
             <TextBlock Grid.Row="4"
                    Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
                        Grid.Column="3"
@@ -280,14 +280,14 @@
                    Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Top">
-              <Run Text="{CompiledBinding Phase}"/>%
+              <Run Text="{CompiledBinding SignalGeneratorPhase}"/>%
             </TextBlock>
             <Slider Grid.Column="1"
                            Minimum="0"
                            Maximum="100"
                            Grid.Row="5"
                     IsEnabled="{CompiledBinding !SignalGeneratorType.IsHeartbeat}"
-                           Value="{CompiledBinding Phase, Mode=TwoWay}" />
+                           Value="{CompiledBinding SignalGeneratorPhase, Mode=TwoWay}" />
             <TextBlock Grid.Row="5"
                        Grid.Column="3"
                    Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"

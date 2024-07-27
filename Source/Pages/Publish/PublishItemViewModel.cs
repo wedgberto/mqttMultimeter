@@ -50,7 +50,7 @@ public sealed class PublishItemViewModel : BaseViewModel
         set => this.RaiseAndSetIfChanged(ref _contentType, value);
     }
 
-    public TimeSpan? Interval
+    public TimeSpan? SignalGeneratorInterval
     {
         get => _interval;
         set => this.RaiseAndSetIfChanged(ref _interval, value);
@@ -62,13 +62,13 @@ public sealed class PublishItemViewModel : BaseViewModel
         set => this.RaiseAndSetIfChanged(ref _messageExpiryInterval, value);
     }
 
-    public int Max
+    public int SignalGeneratorMax
     {
         get => _max;
         set => this.RaiseAndSetIfChanged(ref _max, value);
     }
 
-    public int Min
+    public int SignalGeneratorMin
     {
         get => _min;
         set => this.RaiseAndSetIfChanged(ref _min, value);
@@ -94,13 +94,13 @@ public sealed class PublishItemViewModel : BaseViewModel
         set => this.RaiseAndSetIfChanged(ref _payloadFormat, value);
     }
 
-    public TimeSpan? Period
+    public TimeSpan? SignalGeneratorPeriod
     {
         get => _period;
         set => this.RaiseAndSetIfChanged(ref _period, value);
     }
 
-    public ushort? Phase
+    public ushort? SignalGeneratorPhase
     {
         get => _phase;
         set => this.RaiseAndSetIfChanged(ref _phase, value);

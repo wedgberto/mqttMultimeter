@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using mqttMultimeter.Controls.SignalGeneratorType;
 using mqttMultimeter.Services.State.Model;
 using MQTTnet.Protocol;
 
@@ -32,4 +34,16 @@ public sealed class PublishState
     public ushort TopicAlias { get; set; }
 
     public List<UserProperty> UserProperties { get; set; } = new();
+
+    public SignalGeneratorTypeEnum SignalGeneratorType { get; set; }
+
+    public int SignalGeneratorMin { get; set; }
+
+    public TimeSpan? SignalGeneratorInterval { get; set; }
+
+    public int SignalGeneratorMax { get; set; }
+
+    public TimeSpan? SignalGeneratorPeriod { get; set; }
+
+    public ushort? SignalGeneratorPhase { get; set; }
 }

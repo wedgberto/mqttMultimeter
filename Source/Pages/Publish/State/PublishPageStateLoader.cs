@@ -44,7 +44,15 @@ public static class PublishPageStateLoader
             QualityOfServiceLevel =
             {
                 Value = publishState.QualityOfServiceLevel
-            }
+            },
+            SignalGeneratorType = { 
+                Value = publishState.SignalGeneratorType
+            },
+            SignalGeneratorInterval = publishState.SignalGeneratorInterval,
+            SignalGeneratorMin=publishState.SignalGeneratorMin,
+            SignalGeneratorMax=publishState.SignalGeneratorMax,
+            SignalGeneratorPeriod=publishState.SignalGeneratorPeriod,
+            SignalGeneratorPhase=publishState.SignalGeneratorPhase,
         };
 
         foreach (var userProperty in publishState.UserProperties)

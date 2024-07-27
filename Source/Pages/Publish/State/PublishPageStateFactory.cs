@@ -28,7 +28,13 @@ public static class PublishPageStateFactory
                 MessageExpiryInterval = item.MessageExpiryInterval,
                 PayloadFormatIndicator = item.PayloadFormatIndicator.Value,
                 QualityOfServiceLevel = item.QualityOfServiceLevel.Value,
-                Payload = item.Payload
+                Payload = item.Payload,
+                SignalGeneratorType = item.SignalGeneratorType.Value,
+                SignalGeneratorInterval = item.SignalGeneratorInterval,
+                SignalGeneratorMin = item.SignalGeneratorMin,
+                SignalGeneratorMax = item.SignalGeneratorMax,
+                SignalGeneratorPeriod = item.SignalGeneratorPeriod,
+                SignalGeneratorPhase = item.SignalGeneratorPhase,
             };
 
             foreach (var userProperty in item.UserProperties.Items)
