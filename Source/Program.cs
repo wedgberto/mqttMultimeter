@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Avalonia;
 using Avalonia.ReactiveUI;
@@ -8,7 +9,14 @@ static class Program
 {
     public static void Main(string[] args)
     {
-        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        try
+        {
+            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        }
+        catch(Exception ex)
+        {
+
+       }
     }
 
     // Do not remove this method! It is required for the Designer.
