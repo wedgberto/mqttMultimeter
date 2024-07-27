@@ -45,15 +45,20 @@ public static class PublishPageStateLoader
             {
                 Value = publishState.QualityOfServiceLevel
             },
-            SignalGeneratorType = { 
+            SignalGeneratorType = {
                 Value = publishState.SignalGeneratorType
             },
             SignalGeneratorInterval = publishState.SignalGeneratorInterval,
-            SignalGeneratorMin=publishState.SignalGeneratorMin,
-            SignalGeneratorMax=publishState.SignalGeneratorMax,
-            SignalGeneratorPeriod=publishState.SignalGeneratorPeriod,
-            SignalGeneratorPhase=publishState.SignalGeneratorPhase,
+            SignalGeneratorPeriod = publishState.SignalGeneratorPeriod,
+            SignalGeneratorPhase = publishState.SignalGeneratorPhase,
         };
+
+        try
+        {
+            item.SignalGeneratorMin = publishState.SignalGeneratorMin;
+            item.SignalGeneratorMax = publishState.SignalGeneratorMax;
+        }
+        catch { }
 
         foreach (var userProperty in publishState.UserProperties)
         {

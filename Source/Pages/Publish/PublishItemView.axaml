@@ -13,13 +13,47 @@
   <Grid RowDefinitions="Auto,*,Auto">
 
     <Grid Grid.Row="0"
-          ColumnDefinitions="*,Auto">
+          ColumnDefinitions="*,Auto,Auto,Auto,Auto">
       <TextBox Text="{CompiledBinding Name}"
                Classes="page_item_name" />
 
+      <StackPanel Grid.Column="1" 
+                  VerticalAlignment="Center">
+        <TextBlock HorizontalAlignment="Center" Text="{CompiledBinding LastSignalValue, Mode=OneWay}"/>
+        <TextBlock Text="{CompiledBinding LastSignalTimestamp, Mode=OneWay}"/>
+      </StackPanel>
+      
+      <Button Background="Red"
+              Grid.Column="2"
+              Width="100"
+              Margin="10,0,0,0"
+              IsEnabled="{CompiledBinding CanStop, Mode=OneWay}"
+              Classes="image_button"
+              Command="{CompiledBinding StopSignalGeneration, Mode=OneTime}"
+              IsDefault="True">
+        <StackPanel>
+          <PathIcon Data="{StaticResource stop_regular}" />
+          <TextBlock Text="Stop" />
+        </StackPanel>
+      </Button>
+
+      <Button Background="Green"
+              Grid.Column="3"
+              Width="100"
+              IsEnabled="{CompiledBinding CanStart, Mode=OneWay}"
+              Margin="10,0,0,0"
+              Classes="image_button"
+              Command="{CompiledBinding StartSignalGeneration, Mode=OneTime}"
+              IsDefault="True">
+        <StackPanel>
+          <PathIcon Data="{StaticResource play_regular}" />
+          <TextBlock Text="Start" />
+        </StackPanel>
+      </Button>
+
       <!-- The send button -->
       <Button Background="{DynamicResource SystemAccentColor}"
-              Grid.Column="1"
+              Grid.Column="4"
               Width="100"
               Margin="10,0,0,0"
               Classes="image_button"
@@ -202,95 +236,98 @@
             <Label Grid.Row="1"
                    Grid.Column="0"
                    Classes="caption"
+                   Classes.disabled="{CompiledBinding SignalGeneratorType.IsNone, Mode=OneWay}"
                    Content="Interval" />
             <TextBox Grid.Column="1"
                      Grid.Row="1"
                      Classes="value code_text"
+                    IsEnabled="{CompiledBinding !SignalGeneratorType.IsNone, Mode=OneWay}"
                      Text="{CompiledBinding SignalGeneratorInterval, Mode=TwoWay, StringFormat=hh\\:mm\\:ss\\.ff}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="3"
+                   Classes.disabled="{CompiledBinding SignalGeneratorType.IsNone, Mode=OneWay}"
                        Classes="note">The interval between each generated value.</TextBlock>
 
             <Label Grid.Row="2"
                    Grid.Column="0"
-                   Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasRange, Mode=OneWay}"
                    Classes="caption"
                    Content="Min Value" />
             <TextBlock Grid.Row="2"
                      Grid.Column="1"
                      HorizontalAlignment="Center"
-                   Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
-                     Text="{CompiledBinding SignalGeneratorMin}"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasRange, Mode=OneWay}"
+                     Text="{CompiledBinding SignalGeneratorMin, Mode=OneWay}"
                      VerticalAlignment="Top"/>
             <Slider Value="{CompiledBinding SignalGeneratorMin}"
                     Minimum="-32767"
                     Maximum="32767"
-                    IsEnabled="{CompiledBinding !SignalGeneratorType.IsHeartbeat}"
+                    IsEnabled="{CompiledBinding SignalGeneratorType.HasRange, Mode=OneWay}"
                            Grid.Row="2"
                            Grid.Column="1"/>
             <TextBlock Grid.Row="2"
                        Grid.Column="3"
-                   Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasRange, Mode=OneWay}"
                        Classes="note">The min value that the generator should produce.</TextBlock>
 
             <Label Grid.Row="3"
                    Grid.Column="0"
                    Classes="caption"
-                   Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasRange, Mode=OneWay}"
                    Content="Max Value" />
             <TextBlock Grid.Row="3"
                      Grid.Column="1"
                      HorizontalAlignment="Center"
-                     Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
-                     Text="{CompiledBinding SignalGeneratorMax}"
+                     Classes.disabled="{CompiledBinding !SignalGeneratorType.HasRange, Mode=OneWay}"
+                     Text="{CompiledBinding SignalGeneratorMax, Mode=OneWay}"
                      VerticalAlignment="Top"/>
             <Slider Value="{CompiledBinding SignalGeneratorMax}"
                     Minimum="-32767"
                     Maximum="32767"
-                    IsEnabled="{CompiledBinding !SignalGeneratorType.IsHeartbeat}"
+                    IsEnabled="{CompiledBinding SignalGeneratorType.HasRange, Mode=OneWay}"
                     Grid.Row="3"
                     Grid.Column="1"/>
             <TextBlock Grid.Row="3"
                        Grid.Column="3"
-                     Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
+                     Classes.disabled="{CompiledBinding !SignalGeneratorType.HasRange, Mode=OneWay}"
                      Classes="note">The max value that the generator should produce.</TextBlock>
 
             <Label Grid.Row="4"
                    Grid.Column="0"
                    Classes="caption"
-                   Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
                    Content="Period" />
             <TextBox Grid.Column="1"
                      Grid.Row="4"
                      Classes="value code_text"
-                    IsEnabled="{CompiledBinding !SignalGeneratorType.IsHeartbeat}"
+                    IsEnabled="{CompiledBinding SignalGeneratorType.HasWave, Mode=OneWay}"
                      Text="{CompiledBinding SignalGeneratorPeriod, Mode=TwoWay, StringFormat=hh\\:mm\\:ss\\.ff}" />
             <TextBlock Grid.Row="4"
-                   Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
                        Grid.Column="3"
                        Classes="note">The duration of a full cycle of the generator.</TextBlock>
 
             <Label Grid.Row="5"
                    Grid.Column="0"
                    Classes="caption"
-                   Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
                    Content="Phase" />
             <TextBlock Grid.Row="5"
                      Grid.Column="1"
-                   Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Top">
-              <Run Text="{CompiledBinding SignalGeneratorPhase}"/>%
+              <Run Text="{CompiledBinding SignalGeneratorPhase, Mode=OneWay}"/>%
             </TextBlock>
             <Slider Grid.Column="1"
                            Minimum="0"
                            Maximum="100"
                            Grid.Row="5"
-                    IsEnabled="{CompiledBinding !SignalGeneratorType.IsHeartbeat}"
+                    IsEnabled="{CompiledBinding SignalGeneratorType.HasWave, Mode=OneWay}"
                            Value="{CompiledBinding SignalGeneratorPhase, Mode=TwoWay}" />
             <TextBlock Grid.Row="5"
                        Grid.Column="3"
-                   Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
                        Classes="note">The phase of the cycle of the generator (%).</TextBlock>
 
           </Grid>

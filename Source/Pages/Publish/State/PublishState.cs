@@ -39,11 +39,11 @@ public sealed class PublishState
 
     public int SignalGeneratorMin { get; set; }
 
-    public TimeSpan? SignalGeneratorInterval { get; set; }
+    public TimeSpan SignalGeneratorInterval { get; set; }
 
     public int SignalGeneratorMax { get; set; }
 
-    public TimeSpan? SignalGeneratorPeriod { get; set; }
+    public TimeSpan SignalGeneratorPeriod { get; set; }
 
     public ushort SignalGeneratorPhase { get; set; }
 }

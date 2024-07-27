@@ -24,6 +24,7 @@ public static class ConnectionPageStateFactory
                 UserName = item.SessionOptions.UserName,
                 AuthenticationMethod = item.SessionOptions.AuthenticationMethod,
                 ProtocolVersion = item.ServerOptions.SelectedProtocolVersion.Value,
+                CommunicationTimeout = item.ServerOptions.CommunicationTimeout,
                 KeepAliveInterval = item.SessionOptions.KeepAliveInterval,
                 Transport = item.ServerOptions.SelectedTransport.Value,
                 TlsVersion = item.ServerOptions.SelectedTlsVersion.Value,

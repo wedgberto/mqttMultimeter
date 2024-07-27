@@ -32,4 +32,6 @@ public sealed class ConnectionState
     public Transport Transport { get; set; }
 
     public string? UserName { get; set; }
+    
+    public int CommunicationTimeout { get; set; }
 }

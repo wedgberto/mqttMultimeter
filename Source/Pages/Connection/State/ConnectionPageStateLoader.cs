@@ -63,6 +63,7 @@ public static class ConnectionPageStateLoader
             {
                 Host = state.Host ?? string.Empty,
                 Port = state.Port,
+                CommunicationTimeout = state.CommunicationTimeout,
                 IgnoreCertificateErrors = state.IgnoreCertificateErrors
             },
             SessionOptions =

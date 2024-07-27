@@ -1,4 +1,6 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
+using Google.Protobuf.WellKnownTypes;
 using mqttMultimeter.Controls;
 using mqttMultimeter.Pages.Connection;
 using mqttMultimeter.Pages.Publish;
@@ -13,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Security;
+using System.Reactive;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -23,16 +26,19 @@ namespace mqttMultimeter.Services.Mqtt;
 
 public sealed class MqttClientService
 {
+    private const double tau = Math.PI * 2;
     readonly AsyncEvent<MqttApplicationMessageReceivedEventArgs> _applicationMessageReceivedEvent = new();
     readonly List<Func<InspectMqttPacketEventArgs, Task>> _messageInspectors = new();
     readonly MqttNetEventLogger _mqttNetEventLogger = new();
 
     IMqttClient? _mqttClient;
     int _receivedMessagesCount;
+    private Random _random;
 
     public MqttClientService()
     {
         _mqttNetEventLogger.LogMessagePublished += OnLogMessagePublished;
+        _random = new Random();
     }
 
     public event Func<MqttApplicationMessageReceivedEventArgs, Task> ApplicationMessageReceived
@@ -48,6 +54,18 @@ public sealed class MqttClientService
     public bool IsConnected => _mqttClient?.IsConnected == true;
 
     public int ReceivedMessagesCount => _receivedMessagesCount;
+
+    public Random Random
+    {
+        get
+        {
+            if (_random == null)
+            {
+                _random = new Random();
+            }
+            return _random;
+        }
+    }
 
     public async Task<MqttClientConnectResult> Connect(ConnectionItemViewModel item)
     {
@@ -185,18 +203,58 @@ public sealed class MqttClientService
 
         ThrowIfNotConnected();
 
+        string signalValue = string.Empty;
+        DateTimeOffset now = DateTimeOffset.Now;
+        if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Heartbeat)
+        {
+            signalValue = now.ToUnixTimeMilliseconds().ToString();
+        }
+        else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Sine)
+        {
+            var frequency = 1.0 / (item.SignalGeneratorPeriod.TotalSeconds);
+            var offset = item.SignalGeneratorPeriod.TotalSeconds * tau * item.SignalGeneratorPhase / 100;
+            double v = (0.5 + Math.Sin(offset + tau * frequency * now.ToUnixTimeSeconds()) / 2) * (item.SignalGeneratorMax - item.SignalGeneratorMin) + item.SignalGeneratorMin;
+            signalValue = v.ToString();
+        }
+        else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Sawtooth)
+        {
+            var offset = item.SignalGeneratorPeriod.TotalSeconds * item.SignalGeneratorPhase / 100;
+            double v = ((offset + now.ToUnixTimeSeconds()) % item.SignalGeneratorPeriod.TotalSeconds) / item.SignalGeneratorPeriod.TotalSeconds * (item.SignalGeneratorMax - item.SignalGeneratorMin) + item.SignalGeneratorMin;
+            signalValue = (v > (item.SignalGeneratorMax + item.SignalGeneratorMin) / 2 ? item.SignalGeneratorMax : item.SignalGeneratorMin).ToString();
+        }
+        else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Triangle)
+        {
+            var offset = item.SignalGeneratorPeriod.TotalSeconds * item.SignalGeneratorPhase / 100;
+            double v = ((offset + now.ToUnixTimeSeconds()) % item.SignalGeneratorPeriod.TotalSeconds) / item.SignalGeneratorPeriod.TotalSeconds * (item.SignalGeneratorMax - item.SignalGeneratorMin) + item.SignalGeneratorMin;
+            signalValue = v.ToString();
+        }
+        else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Random)
+        {
+            double v = Math.Round((Random.NextDouble() * (item.SignalGeneratorMax - item.SignalGeneratorMin) + item.SignalGeneratorMin));
+            signalValue = v.ToString();
+        }
+        else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.WeightedRandom)
+        {
+            int range = item.SignalGeneratorMax - item.SignalGeneratorMin;
+            double v = Math.Round(range / (((Random.NextDouble() * 2) - 1) * range) + ((item.SignalGeneratorMin + item.SignalGeneratorMax)/ 2));
+            signalValue = v.ToString();
+        }
+
+        string payloadTimestamp = now.ToString("O");
+        var payloadString = item.Payload.Replace("{Value}", signalValue).Replace("{Timestamp}", payloadTimestamp);
+
         byte[] payload;
         if (item.PayloadFormat == BufferFormat.Plain)
         {
-            payload = Encoding.UTF8.GetBytes(item.Payload);
+            payload = Encoding.UTF8.GetBytes(payloadString);
         }
         else if (item.PayloadFormat == BufferFormat.Base64)
         {
-            payload = Convert.FromBase64String(item.Payload);
+            payload = Convert.FromBase64String(payloadString);
         }
         else if (item.PayloadFormat == BufferFormat.Path)
         {
-            payload = File.ReadAllBytes(item.Payload);
+            payload = File.ReadAllBytes(payloadString);
         }
         else
         {
@@ -229,6 +287,8 @@ public sealed class MqttClientService
                 applicationMessageBuilder.WithUserProperty(userProperty.Name, userProperty.Value);
             }
         }
+
+        item.UpdateLastSignalValue(signalValue, payloadTimestamp);
 
         return _mqttClient!.PublishAsync(applicationMessageBuilder.Build());
     }
