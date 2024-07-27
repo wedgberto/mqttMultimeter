@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace mqttMultimeter.Controls.SignalGeneratorType
+﻿namespace mqttMultimeter.Controls.SignalGeneratorType
 {
     public enum SignalGeneratorTypeEnum
     {
+        None = 0,
         Heartbeat,
         Sine,
         Sawtooth,

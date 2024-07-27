@@ -7,51 +7,78 @@ namespace mqttMultimeter.Controls;
 
 public sealed class SignalGeneratorTypeSelectorViewModel : BaseSingleSelectionViewModel
 {
-    public SignalGeneratorTypeSelectorViewModel() : base(6)
+    private const int SIZE = 7;
+
+    public SignalGeneratorTypeSelectorViewModel() : base(SIZE)
     {
-        Value = SignalGeneratorTypeEnum.Heartbeat;
+        Value = SignalGeneratorTypeEnum.None;
+    }
+
+    public bool HasInterval
+    {
+        get => (int)this.Value > (int)SignalGeneratorTypeEnum.None;
+    }
+
+    public bool HasRange
+    {
+        get => (int)this.Value > (int)SignalGeneratorTypeEnum.Heartbeat;
+    }
+
+    public bool HasWave
+    {
+        get => (int)this.Value > (int)SignalGeneratorTypeEnum.Heartbeat && (int)this.Value < (int)SignalGeneratorTypeEnum.Random;
+    }
+
+    public bool IsNone
+    {
+        get => GetState((int)SignalGeneratorTypeEnum.None);
+        set => UpdateStates(0, value);
     }
 
     public bool IsHeartbeat
     {
-        get => GetState(0);
-        set => UpdateStates(0, value);
+        get => GetState((int)SignalGeneratorTypeEnum.Heartbeat);
+        set => UpdateStates((int)SignalGeneratorTypeEnum.Heartbeat, value);
     }
 
     public bool IsSine
     {
-        get => GetState(1);
-        set => UpdateStates(1, value);
+        get => GetState((int)SignalGeneratorTypeEnum.Sine);
+        set => UpdateStates((int)SignalGeneratorTypeEnum.Sine, value);
     }
 
     public bool IsSawtooth
     {
-        get => GetState(2);
-        set => UpdateStates(2, value);
+        get => GetState((int)SignalGeneratorTypeEnum.Sawtooth);
+        set => UpdateStates((int)SignalGeneratorTypeEnum.Sawtooth, value);
     }
 
     public bool IsTriangle
     {
-        get => GetState(3);
-        set => UpdateStates(3, value);
+        get => GetState((int)SignalGeneratorTypeEnum.Triangle);
+        set => UpdateStates((int)SignalGeneratorTypeEnum.Triangle, value);
     }
 
     public bool IsRandom
     {
-        get => GetState(4);
-        set => UpdateStates(4, value);
+        get => GetState((int)SignalGeneratorTypeEnum.Random);
+        set => UpdateStates((int)SignalGeneratorTypeEnum.Random, value);
     }
 
     public bool IsWeightedRandom
     {
-        get => GetState(5);
-        set => UpdateStates(5, value);
+        get => GetState((int)SignalGeneratorTypeEnum.WeightedRandom);
+        set => UpdateStates((int)SignalGeneratorTypeEnum.WeightedRandom, value);
     }
 
     public SignalGeneratorTypeEnum Value
     {
         get
         {
+            if (IsNone)
+            {
+                return SignalGeneratorTypeEnum.None;
+            }
 
             if (IsHeartbeat)
             {
@@ -88,7 +115,7 @@ public sealed class SignalGeneratorTypeSelectorViewModel : BaseSingleSelectionVi
 
         set
         {
-            foreach (var i in Enumerable.Range(0, 5))
+            foreach (var i in Enumerable.Range(0, SIZE))
             {
                 UpdateStates(i, value == (SignalGeneratorTypeEnum)i);
             }

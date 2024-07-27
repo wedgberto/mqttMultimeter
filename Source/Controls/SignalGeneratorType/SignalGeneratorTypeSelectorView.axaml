@@ -9,6 +9,9 @@
   </Design.DataContext>
 
   <StackPanel Orientation="Horizontal">
+    <CheckBox Content="None"
+              Classes="radio-button"
+              IsChecked="{Binding Path=IsNone, Mode=TwoWay}" />
     <CheckBox Content="Heartbeat"
               Classes="radio-button"
               IsChecked="{Binding Path=IsHeartbeat, Mode=TwoWay}" />
