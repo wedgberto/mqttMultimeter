@@ -1,4 +1,15 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using mqttMultimeter.Controls;
+using mqttMultimeter.Pages.Connection;
+using mqttMultimeter.Pages.Publish;
+using mqttMultimeter.Pages.Subscriptions;
+using MQTTnet;
+using MQTTnet.Client;
+using MQTTnet.Diagnostics.Logger;
+using MQTTnet.Diagnostics.PacketInspection;
+using MQTTnet.Exceptions;
+using MQTTnet.Internal;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Security;
@@ -7,16 +18,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
-using mqttMultimeter.Controls;
-using mqttMultimeter.Pages.Connection;
-using mqttMultimeter.Pages.Publish;
-using mqttMultimeter.Pages.Subscriptions;
-using MQTTnet;
-using MQTTnet.Client;
-using MQTTnet.Diagnostics;
-using MQTTnet.Exceptions;
-using MQTTnet.Internal;
 
 namespace mqttMultimeter.Services.Mqtt;
 
@@ -60,12 +61,12 @@ public sealed class MqttClientService
             _mqttClient.ApplicationMessageReceivedAsync -= OnApplicationMessageReceived;
             _mqttClient.DisconnectedAsync -= OnDisconnected;
             _mqttClient.InspectPacketAsync -= OnInspectPacket;
-            
+
             await _mqttClient.DisconnectAsync();
             _mqttClient.Dispose();
         }
 
-        _mqttClient = new MqttFactory(_mqttNetEventLogger).CreateMqttClient();
+        _mqttClient = new MqttClientFactory(_mqttNetEventLogger).CreateMqttClient();
 
         var clientOptionsBuilder = new MqttClientOptionsBuilder().WithTimeout(TimeSpan.FromSeconds(item.ServerOptions.CommunicationTimeout))
             .WithProtocolVersion(item.ServerOptions.SelectedProtocolVersion.Value)
@@ -106,19 +107,26 @@ public sealed class MqttClientService
                 o.WithSslProtocols(item.ServerOptions.SelectedTlsVersion.Value);
                 o.WithIgnoreCertificateChainErrors(item.ServerOptions.IgnoreCertificateErrors);
                 o.WithIgnoreCertificateRevocationErrors(item.ServerOptions.IgnoreCertificateErrors);
-                o.WithCertificateValidationHandler(item.ServerOptions.IgnoreCertificateErrors ? _ => true : null);
+                if (!item.ServerOptions.IgnoreCertificateErrors)
+                {
+                    o.WithCertificateValidationHandler(_ => true);
+                }
 
                 if (!string.IsNullOrEmpty(item.SessionOptions.CertificatePath))
                 {
                     X509Certificate2Collection certificates = new();
 
-                    if (string.IsNullOrEmpty(item.SessionOptions.CertificatePassword))
+                    if (!string.IsNullOrEmpty(item.SessionOptions.KeyPath))
                     {
-                        certificates.Add(new X509Certificate2(item.SessionOptions.CertificatePath));
+                        certificates.Add(new X509Certificate2(X509Certificate2.CreateFromPemFile(item.SessionOptions.CertificatePath, item.SessionOptions.KeyPath).Export(X509ContentType.Pfx)));
+                    }
+                    else if (!string.IsNullOrEmpty(item.SessionOptions.CertificatePassword))
+                    {
+                        certificates.Add(new X509Certificate2(item.SessionOptions.CertificatePath, item.SessionOptions.CertificatePassword));
                     }
                     else
                     {
-                        certificates.Add(new X509Certificate2(item.SessionOptions.CertificatePath, item.SessionOptions.CertificatePassword));
+                        certificates.Add(new X509Certificate2(item.SessionOptions.CertificatePath));
                     }
 
                     o.WithClientCertificates(certificates);
