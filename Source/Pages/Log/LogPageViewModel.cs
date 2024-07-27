@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using mqttMultimeter.Common;
 using mqttMultimeter.Services.Mqtt;
-using MQTTnet.Diagnostics;
+using MQTTnet.Diagnostics.Logger;
 using ReactiveUI;
+using System;
+using System.Collections.ObjectModel;
 
 namespace mqttMultimeter.Pages.Log;
 

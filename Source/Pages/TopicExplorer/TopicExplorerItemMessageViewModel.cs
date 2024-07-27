@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Text;
 using mqttMultimeter.Common;
 using mqttMultimeter.Pages.Inflight;
@@ -16,8 +17,8 @@ public sealed class TopicExplorerItemMessageViewModel : BaseViewModel
         }
 
         Timestamp = timestamp;
-        PayloadPreview = GeneratePayloadPreview(applicationMessage.PayloadSegment);
-        PayloadLength = applicationMessage.PayloadSegment.Count;
+        PayloadPreview = GeneratePayloadPreview(applicationMessage.Payload.ToArray());
+        PayloadLength = (int)applicationMessage.Payload.Length;
         Retain = applicationMessage.Retain;
 
         Delay = delay;

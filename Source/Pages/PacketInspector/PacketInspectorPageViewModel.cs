@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using mqttMultimeter.Common;
 using mqttMultimeter.Services.Mqtt;
 using MQTTnet.Diagnostics;
+using MQTTnet.Diagnostics.PacketInspection;
 using ReactiveUI;
 
 namespace mqttMultimeter.Pages.PacketInspector;

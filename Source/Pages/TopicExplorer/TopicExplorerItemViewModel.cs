@@ -92,7 +92,7 @@ public sealed class TopicExplorerItemViewModel : BaseViewModel
 
         var timestamp = DateTime.Now;
 
-        TotalPayloadLength += message.PayloadSegment.Count;
+        TotalPayloadLength += (int)message.Payload.Length;
         LastUpdateTimestamp = timestamp;
 
         var duration = TimeSpan.Zero;
