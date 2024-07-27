@@ -206,7 +206,7 @@
             <TextBox Grid.Column="1"
                      Grid.Row="1"
                      Classes="value code_text"
-                     Text="{Binding Path=SignalGeneratorInterval, Mode=TwoWay}" />
+                     Text="{CompiledBinding SignalGeneratorInterval, Mode=TwoWay, StringFormat=hh\\:mm\\:ss\\.ff}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="3"
                        Classes="note">The interval between each generated value.</TextBlock>
@@ -264,7 +264,7 @@
                      Grid.Row="4"
                      Classes="value code_text"
                     IsEnabled="{CompiledBinding !SignalGeneratorType.IsHeartbeat}"
-                     Text="{CompiledBinding SignalGeneratorPeriod, Mode=TwoWay}" />
+                     Text="{CompiledBinding SignalGeneratorPeriod, Mode=TwoWay, StringFormat=hh\\:mm\\:ss\\.ff}" />
             <TextBlock Grid.Row="4"
                    Classes.disabled="{Binding SignalGeneratorType.IsHeartbeat}"
                        Grid.Column="3"
