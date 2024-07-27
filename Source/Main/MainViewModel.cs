@@ -21,6 +21,11 @@ public sealed class MainViewModel : BaseViewModel
     int _counter;
     object? _overlayContent;
 
+    public MainViewModel()
+    {
+        
+    }
+
     public MainViewModel(ConnectionPageViewModel connectionPage,
         PublishPageViewModel publishPage,
         SubscriptionsPageViewModel subscriptionsPage,
