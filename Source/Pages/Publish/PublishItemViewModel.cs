@@ -16,7 +16,7 @@ public sealed class PublishItemViewModel : BaseViewModel
     string _name = string.Empty;
     string _payload = string.Empty;
     TimeSpan? _period = TimeSpan.FromSeconds(1.5);
-    ushort? _phase = 0;
+    ushort _phase = 0;
     BufferFormat _payloadFormat;
     string? _responseTopic;
     bool _retain;
@@ -100,7 +100,7 @@ public sealed class PublishItemViewModel : BaseViewModel
         set => this.RaiseAndSetIfChanged(ref _period, value);
     }
 
-    public ushort? SignalGeneratorPhase
+    public ushort SignalGeneratorPhase
     {
         get => _phase;
         set => this.RaiseAndSetIfChanged(ref _phase, value);
@@ -125,7 +125,6 @@ public sealed class PublishItemViewModel : BaseViewModel
     }
 
     public SignalGeneratorTypeSelectorViewModel SignalGeneratorType { get; } = new();
-
 
     public uint SubscriptionIdentifier
     {

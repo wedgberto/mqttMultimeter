@@ -45,5 +45,5 @@ public sealed class PublishState
 
     public TimeSpan? SignalGeneratorPeriod { get; set; }
 
-    public ushort? SignalGeneratorPhase { get; set; }
+    public ushort SignalGeneratorPhase { get; set; }
 }
