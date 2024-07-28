@@ -18,9 +18,9 @@
     <CheckBox Content="Sine"
               Classes="radio-button"
               IsChecked="{Binding Path=IsSine, Mode=TwoWay}" />
-    <CheckBox Content="Sawtooth"
+    <CheckBox Content="Square"
               Classes="radio-button"
-              IsChecked="{Binding Path=IsSawtooth, Mode=TwoWay}" />
+              IsChecked="{Binding Path=IsSquare, Mode=TwoWay}" />
     <CheckBox Content="Triangle"
               Classes="radio-button"
               IsChecked="{Binding Path=IsTriangle, Mode=TwoWay}" />

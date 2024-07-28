@@ -47,10 +47,10 @@ public sealed class SignalGeneratorTypeSelectorViewModel : BaseSingleSelectionVi
         set => UpdateStates((int)SignalGeneratorTypeEnum.Sine, value);
     }
 
-    public bool IsSawtooth
+    public bool IsSquare
     {
-        get => GetState((int)SignalGeneratorTypeEnum.Sawtooth);
-        set => UpdateStates((int)SignalGeneratorTypeEnum.Sawtooth, value);
+        get => GetState((int)SignalGeneratorTypeEnum.Square);
+        set => UpdateStates((int)SignalGeneratorTypeEnum.Square, value);
     }
 
     public bool IsTriangle
@@ -90,9 +90,9 @@ public sealed class SignalGeneratorTypeSelectorViewModel : BaseSingleSelectionVi
                 return SignalGeneratorTypeEnum.Sine;
             }
 
-            if (IsSawtooth)
+            if (IsSquare)
             {
-                return SignalGeneratorTypeEnum.Sawtooth;
+                return SignalGeneratorTypeEnum.Square;
             }
 
             if (IsTriangle)

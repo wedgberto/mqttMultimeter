@@ -5,7 +5,7 @@
         None = 0,
         Heartbeat,
         Sine,
-        Sawtooth,
+        Square,
         Triangle,
         Random,
         WeightedRandom
