@@ -18,12 +18,12 @@
       <TextBox Text="{CompiledBinding Name}"
                Classes="page_item_name" />
 
-      <StackPanel Grid.Column="1" 
+      <StackPanel Grid.Column="1"
                   VerticalAlignment="Center">
         <TextBlock HorizontalAlignment="Center" Text="{CompiledBinding LastSignalValue, Mode=OneWay}"/>
         <TextBlock Text="{CompiledBinding LastSignalTimestamp, Mode=OneWay}"/>
       </StackPanel>
-      
+
       <Button Background="Red"
               Grid.Column="2"
               Width="100"
@@ -220,7 +220,7 @@
         </TabItem>
 
         <TabItem Header="Signal Generation">
-          <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,auto"
+          <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
                 ColumnDefinitions="Auto,*,Auto">
 
             <!-- The signal type -->
@@ -329,9 +329,41 @@
                            Value="{CompiledBinding SignalGeneratorPhase, Mode=TwoWay}" />
             <TextBlock Grid.Row="5"
                        Grid.Column="3"
-                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                       Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
                        Classes="note">The phase of the cycle of the generator (%).</TextBlock>
 
+            <TextBlock
+              Grid.Row="6"
+              Grid.Column="0">
+              Payload placeholders
+            </TextBlock>
+            <Grid Grid.Row="6"
+                        Grid.Column="1"
+                               ColumnDefinitions="*,*,*,*">
+
+              <TextBlock Grid.Column="0" HorizontalAlignment="Right">
+                {Value}
+              </TextBlock>
+              <TextBlock Grid.Column="1"
+                IsVisible="{CompiledBinding HasPayloadValueTemplate}">
+                 ✔
+              </TextBlock>
+              <TextBlock Grid.Column="1"
+                IsVisible="{CompiledBinding !HasPayloadValueTemplate}">
+                ❌
+              </TextBlock>
+              <TextBlock Grid.Column="2" HorizontalAlignment="Right">
+                {Timestamp}
+              </TextBlock>
+              <TextBlock Grid.Column="3"
+              IsVisible="{CompiledBinding HasPayloadTimespanTemplate}">
+                ✔
+              </TextBlock>
+              <TextBlock Grid.Column="3"
+              IsVisible="{CompiledBinding !HasPayloadTimespanTemplate}">
+                ❌
+              </TextBlock>
+            </Grid>
           </Grid>
         </TabItem>
 

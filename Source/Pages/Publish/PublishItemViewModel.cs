@@ -29,6 +29,8 @@ public sealed class PublishItemViewModel : BaseViewModel
     ushort _topicAlias;
     bool _canStart;
     bool _isGenerating;
+    bool _hasPayloadValueTemplate;
+    bool _hasPayloadTimespanTemplate;
     readonly Timer _timer;
 
     public PublishItemViewModel()
@@ -66,6 +68,18 @@ public sealed class PublishItemViewModel : BaseViewModel
             }
         });
 
+        this.Changed.Subscribe(o =>
+        {
+            if (o.PropertyName == nameof(Payload))
+            {
+                if (o.Sender is PublishItemViewModel viewModel)
+                {
+                    this.HasPayloadValueTemplate = viewModel.Payload.Contains("{Value}");
+                    this.HasPayloadTimespanTemplate = viewModel.Payload.Contains("{Timestamp}");
+                }
+            }
+        });
+
         _timer = new Timer(o =>
         {
             this.Publish();
@@ -100,6 +114,18 @@ public sealed class PublishItemViewModel : BaseViewModel
     {
         get => _isGenerating;
         private set => this.RaiseAndSetIfChanged(ref _isGenerating, value);
+    }
+
+    public bool HasPayloadValueTemplate
+    {
+        get => _hasPayloadValueTemplate;
+        set => this.RaiseAndSetIfChanged(ref _hasPayloadValueTemplate, value);
+    }
+
+    public bool HasPayloadTimespanTemplate
+    {
+        get => _hasPayloadTimespanTemplate;
+        set => this.RaiseAndSetIfChanged(ref _hasPayloadTimespanTemplate, value);
     }
 
     public int SignalGeneratorMax
