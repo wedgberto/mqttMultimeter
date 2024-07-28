@@ -2,6 +2,7 @@
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:publish="clr-namespace:mqttMultimeter.Pages.Publish"
+             xmlns:converters="clr-namespace:mqttMultimeter.Converters"
              xmlns:controls="clr-namespace:mqttMultimeter.Controls"
              Design.Height="600"
              Design.Width="800"
@@ -242,7 +243,7 @@
                      Grid.Row="1"
                      Classes="value code_text"
                     IsEnabled="{CompiledBinding !SignalGeneratorType.IsNone, Mode=OneWay}"
-                     Text="{CompiledBinding SignalGeneratorInterval, Mode=TwoWay, StringFormat=hh\\:mm\\:ss\\.ff}" />
+                     Text="{CompiledBinding SignalGeneratorInterval, Mode=TwoWay, Converter={x:Static converters:TimeSpanToLongStringConverter.Instance}}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="3"
                    Classes.disabled="{CompiledBinding SignalGeneratorType.IsNone, Mode=OneWay}"
@@ -301,7 +302,7 @@
                      Grid.Row="4"
                      Classes="value code_text"
                     IsEnabled="{CompiledBinding SignalGeneratorType.HasWave, Mode=OneWay}"
-                     Text="{CompiledBinding SignalGeneratorPeriod, Mode=TwoWay, StringFormat=hh\\:mm\\:ss\\.ff}" />
+                     Text="{CompiledBinding SignalGeneratorPeriod, Mode=TwoWay, Converter={x:Static converters:TimeSpanToLongStringConverter.Instance}}" />
             <TextBlock Grid.Row="4"
                    Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
                        Grid.Column="3"

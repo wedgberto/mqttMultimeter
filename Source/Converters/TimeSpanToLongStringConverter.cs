@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Avalonia.Data;
 using Avalonia.Data.Converters;
 
 namespace mqttMultimeter.Converters;
@@ -15,11 +16,14 @@ public sealed class TimeSpanToLongStringConverter : IValueConverter
             return "-";
         }
 
-        return timeSpan.ToString(@"hh\:mm\:ss\:ffff");
+        return timeSpan.ToString(@"hh\:mm\:ss\.ffff");
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return null;
+        if (TimeSpan.TryParse((string)value, out var parsed)) {
+            return parsed;
+        }
+        return value;
     }
 }
