@@ -8,6 +8,7 @@
         Square,
         Triangle,
         Random,
-        WeightedRandom
+        WeightedRandom,
+        Wanderer
     }
 }

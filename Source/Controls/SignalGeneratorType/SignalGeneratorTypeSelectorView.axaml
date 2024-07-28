@@ -30,5 +30,8 @@
     <CheckBox Content="Weighted Random"
               Classes="radio-button"
               IsChecked="{Binding Path=IsWeightedRandom, Mode=TwoWay}" />
+    <CheckBox Content="Wanderer"
+              Classes="radio-button"
+              IsChecked="{Binding Path=IsWanderer, Mode=TwoWay}" />
   </StackPanel>
 </UserControl>

@@ -7,7 +7,7 @@ namespace mqttMultimeter.Controls;
 
 public sealed class SignalGeneratorTypeSelectorViewModel : BaseSingleSelectionViewModel
 {
-    private const int SIZE = 7;
+    private const int SIZE = 8;
 
     public SignalGeneratorTypeSelectorViewModel() : base(SIZE)
     {
@@ -26,7 +26,7 @@ public sealed class SignalGeneratorTypeSelectorViewModel : BaseSingleSelectionVi
 
     public bool HasWave
     {
-        get => (int)this.Value > (int)SignalGeneratorTypeEnum.Heartbeat && (int)this.Value < (int)SignalGeneratorTypeEnum.Random;
+        get => ((int)this.Value == (int)SignalGeneratorTypeEnum.Wanderer) || (int)this.Value > (int)SignalGeneratorTypeEnum.Heartbeat && (int)this.Value < (int)SignalGeneratorTypeEnum.Random;
     }
 
     public bool IsNone
@@ -71,6 +71,12 @@ public sealed class SignalGeneratorTypeSelectorViewModel : BaseSingleSelectionVi
         set => UpdateStates((int)SignalGeneratorTypeEnum.WeightedRandom, value);
     }
 
+    public bool IsWanderer
+    {
+        get => GetState((int)SignalGeneratorTypeEnum.Wanderer);
+        set => UpdateStates((int)SignalGeneratorTypeEnum.Wanderer, value);
+    }
+
     public SignalGeneratorTypeEnum Value
     {
         get
@@ -108,6 +114,11 @@ public sealed class SignalGeneratorTypeSelectorViewModel : BaseSingleSelectionVi
             if (IsWeightedRandom)
             {
                 return SignalGeneratorTypeEnum.WeightedRandom;
+            }
+
+            if (IsWanderer)
+            {
+                return SignalGeneratorTypeEnum.Wanderer;
             }
 
             throw new NotSupportedException();

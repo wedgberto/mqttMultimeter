@@ -240,7 +240,19 @@ public sealed class MqttClientService
         else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.WeightedRandom)
         {
             int range = item.SignalGeneratorMax - item.SignalGeneratorMin;
-            double v = Math.Round(range / (((Random.NextDouble() * 2) - 1) * range) + ((item.SignalGeneratorMin + item.SignalGeneratorMax)/ 2));
+            double v = Math.Round(range / (((Random.NextDouble() * 2) - 1) * range) + ((item.SignalGeneratorMin + item.SignalGeneratorMax) / 2));
+            signalValue = v.ToString();
+        }
+        else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Wanderer)
+        {
+            var randomDirection = this._random.NextDouble();
+            var increment = randomDirection > 0.666 ? item.SignalGeneratorPhase : randomDirection > 0.333 ? 0 : -item.SignalGeneratorPhase;
+            if (!double.TryParse(item.LastSignalValue, out var previous))
+            {
+                previous = (item.SignalGeneratorMax - item.SignalGeneratorMin) / 2;
+            }
+            var next = previous + increment;
+            double v = Math.Clamp(next, item.SignalGeneratorMin, item.SignalGeneratorMax);
             signalValue = v.ToString();
         }
 
