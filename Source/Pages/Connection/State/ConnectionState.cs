@@ -34,4 +34,12 @@ public sealed class ConnectionState
     public string? UserName { get; set; }
     
     public int CommunicationTimeout { get; set; }
+    
+    public string Password { get; set; }
+
+    public int ReceiveMaximum { get; set; }
+
+    public bool RequestProblemInformation { get; set; }
+
+    public bool RequestResponseInformation { get; set; }
 }

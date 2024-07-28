@@ -30,12 +30,16 @@ public static class ConnectionPageStateFactory
                 TlsVersion = item.ServerOptions.SelectedTlsVersion.Value,
                 IgnoreCertificateErrors = item.ServerOptions.IgnoreCertificateErrors,
                 CertificatePath = item.SessionOptions.CertificatePath,
-                KeyPath = item.SessionOptions.KeyPath
+                KeyPath = item.SessionOptions.KeyPath,
+                ReceiveMaximum = item.ServerOptions.ReceiveMaximum,
+                RequestResponseInformation = item.SessionOptions.RequestResponseInformation,
+                RequestProblemInformation = item.SessionOptions.RequestProblemInformation,
             };
 
             if (item.SessionOptions.SaveCertificatePassword)
             {
                 itemState.CertificatePassword = item.SessionOptions.CertificatePassword;
+                itemState.Password = item.SessionOptions.Password;
             }
 
             state.Connections.Add(itemState);

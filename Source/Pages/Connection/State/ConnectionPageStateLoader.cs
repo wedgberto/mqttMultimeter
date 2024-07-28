@@ -64,6 +64,7 @@ public static class ConnectionPageStateLoader
                 Host = state.Host ?? string.Empty,
                 Port = state.Port,
                 CommunicationTimeout = state.CommunicationTimeout,
+                ReceiveMaximum = state.ReceiveMaximum,
                 IgnoreCertificateErrors = state.IgnoreCertificateErrors
             },
             SessionOptions =
@@ -73,10 +74,12 @@ public static class ConnectionPageStateLoader
                 AuthenticationMethod = state.AuthenticationMethod ?? string.Empty,
                 CertificatePath = state.CertificatePath ?? string.Empty,
                 CertificatePassword = state.CertificatePassword ?? string.Empty,
+                Password = state.Password ?? string.Empty,
                 KeyPath = state.KeyPath ?? string.Empty,
+                RequestProblemInformation = state.RequestProblemInformation,
+                RequestResponseInformation = state.RequestResponseInformation,
                 // If there was a password saved in the state we assume that it should be saved (also in the future).
-                SaveCertificatePassword = !string.IsNullOrEmpty(state.CertificatePassword)
-
+                SaveCertificatePassword = !string.IsNullOrEmpty(state.CertificatePassword) || !string.IsNullOrEmpty(state.Password)
             }
         };
 
