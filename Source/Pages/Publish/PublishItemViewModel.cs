@@ -5,6 +5,7 @@ using Avalonia.Data;
 using DynamicData.Binding;
 using mqttMultimeter.Common;
 using mqttMultimeter.Controls;
+using mqttMultimeter.Pages.Connection;
 using ReactiveUI;
 
 namespace mqttMultimeter.Pages.Publish;
@@ -27,7 +28,6 @@ public sealed class PublishItemViewModel : BaseViewModel
     string? _topic;
     ushort _topicAlias;
     bool _canStart;
-    bool _canStop;
     bool _isGenerating;
     readonly Timer _timer;
 
@@ -46,12 +46,23 @@ public sealed class PublishItemViewModel : BaseViewModel
         PayloadFormatIndicator.IsUnspecified = true;
         Response.UserProperties.IsReadOnly = true;
 
+        ownerPage.Changed.Subscribe(o =>
+        {
+            if (o.Sender is PublishPageViewModel publishPageViewModel)
+            {
+                this.CanStart = publishPageViewModel.IsConnected && !IsGenerating;
+                if (this.IsGenerating && !publishPageViewModel.IsConnected)
+                {
+                    this.StopSignalGeneration();
+                }
+            }
+        });
+
         SignalGeneratorType.Changed.Subscribe(v =>
         {
             if (v.Sender is SignalGeneratorTypeSelectorViewModel vm)
             {
-                CanStart = !vm.IsNone && !this.IsGenerating;
-                CanStop = this.IsGenerating;
+                CanStart = ownerPage.IsConnected && !vm.IsNone && !this.IsGenerating;
             }
         });
 
@@ -83,12 +94,6 @@ public sealed class PublishItemViewModel : BaseViewModel
     {
         get => _canStart;
         private set => this.RaiseAndSetIfChanged(ref _canStart, value);
-    }
-
-    public bool CanStop
-    {
-        get => _canStop;
-        private set => this.RaiseAndSetIfChanged(ref _canStop, value);
     }
 
     public bool IsGenerating
@@ -172,7 +177,7 @@ public sealed class PublishItemViewModel : BaseViewModel
 
     public string LastSignalValue
     {
-        get => _lastSignalValue; 
+        get => _lastSignalValue;
         private set => this.RaiseAndSetIfChanged(ref _lastSignalValue, value);
     }
 
@@ -212,7 +217,6 @@ public sealed class PublishItemViewModel : BaseViewModel
 
     public void StartSignalGeneration()
     {
-        CanStop = !SignalGeneratorType.IsNone;
         CanStart = false;
         IsGenerating = true;
         _timer.Change(TimeSpan.Zero, this.SignalGeneratorInterval);
@@ -220,8 +224,7 @@ public sealed class PublishItemViewModel : BaseViewModel
 
     public void StopSignalGeneration()
     {
-        CanStop = false;
-        CanStart = !SignalGeneratorType.IsNone;
+        CanStart = OwnerPage.IsConnected && !SignalGeneratorType.IsNone;
         IsGenerating = false;
         _timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
     }

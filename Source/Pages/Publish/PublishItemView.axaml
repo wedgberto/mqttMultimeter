@@ -28,7 +28,7 @@
               Grid.Column="2"
               Width="100"
               Margin="10,0,0,0"
-              IsEnabled="{CompiledBinding CanStop, Mode=OneWay}"
+              IsEnabled="{CompiledBinding IsGenerating, Mode=OneWay}"
               Classes="image_button"
               Command="{CompiledBinding StopSignalGeneration, Mode=OneTime}"
               IsDefault="True">
@@ -58,6 +58,7 @@
               Width="100"
               Margin="10,0,0,0"
               Classes="image_button"
+              IsEnabled="{CompiledBinding OwnerPage.IsConnected}"
               Command="{CompiledBinding Publish, Mode=OneTime}"
               IsDefault="True">
         <StackPanel>

@@ -49,6 +49,8 @@ public sealed class MqttClientService
 
     public event EventHandler<MqttClientDisconnectedEventArgs>? Disconnected;
 
+    public event EventHandler<MqttClientConnectedEventArgs>? Connected;
+
     public event Action<MqttNetLogMessagePublishedEventArgs>? LogMessagePublished;
 
     public bool IsConnected => _mqttClient?.IsConnected == true;
@@ -77,6 +79,7 @@ public sealed class MqttClientService
         if (_mqttClient != null)
         {
             _mqttClient.ApplicationMessageReceivedAsync -= OnApplicationMessageReceived;
+            _mqttClient.ConnectedAsync -= OnConnected;
             _mqttClient.DisconnectedAsync -= OnDisconnected;
             _mqttClient.InspectPacketAsync -= OnInspectPacket;
 
@@ -157,6 +160,7 @@ public sealed class MqttClientService
 
         // TODO: Attach and detach packet inspection on demand (internal overhead in MQTTnet library)!
         _mqttClient.InspectPacketAsync += OnInspectPacket;
+        _mqttClient.ConnectedAsync += OnConnected;
         _mqttClient.DisconnectedAsync += OnDisconnected;
 
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(item.ServerOptions.CommunicationTimeout));
@@ -216,7 +220,7 @@ public sealed class MqttClientService
             double v = (0.5 + Math.Sin(offset + tau * frequency * now.ToUnixTimeSeconds()) / 2) * (item.SignalGeneratorMax - item.SignalGeneratorMin) + item.SignalGeneratorMin;
             signalValue = v.ToString();
         }
-        else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Sawtooth)
+        else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Square)
         {
             var offset = item.SignalGeneratorPeriod.TotalSeconds * item.SignalGeneratorPhase / 100;
             double v = ((offset + now.ToUnixTimeSeconds()) % item.SignalGeneratorPeriod.TotalSeconds) / item.SignalGeneratorPeriod.TotalSeconds * (item.SignalGeneratorMax - item.SignalGeneratorMin) + item.SignalGeneratorMin;
@@ -359,6 +363,16 @@ public sealed class MqttClientService
             DispatcherPriority.Render);
 
         await _applicationMessageReceivedEvent.InvokeAsync(eventArgs);
+    }
+
+    Task OnConnected(MqttClientConnectedEventArgs eventArgs)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            Connected?.Invoke(this, eventArgs);
+        });
+
+        return Task.CompletedTask;
     }
 
     Task OnDisconnected(MqttClientDisconnectedEventArgs eventArgs)

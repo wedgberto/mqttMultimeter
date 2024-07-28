@@ -7,12 +7,14 @@ using mqttMultimeter.Pages.Inflight;
 using mqttMultimeter.Pages.Publish.State;
 using mqttMultimeter.Services.Mqtt;
 using mqttMultimeter.Services.State;
+using ReactiveUI;
 
 namespace mqttMultimeter.Pages.Publish;
 
 public sealed class PublishPageViewModel : BasePageViewModel
 {
     readonly MqttClientService _mqttClientService;
+    private bool _isConnected;
 
     public PublishPageViewModel()
     {
@@ -37,6 +39,22 @@ public sealed class PublishPageViewModel : BasePageViewModel
 
         stateService.Saving += SaveState;
         LoadState(stateService);
+
+        mqttClientService.Connected += (_, e) =>
+        {
+            IsConnected = true;
+        };
+
+        mqttClientService.Disconnected += (_, e) =>
+        {
+            IsConnected = false;
+        };
+    }
+
+    public bool IsConnected
+    {
+        get => _isConnected;
+        set => this.RaiseAndSetIfChanged(ref _isConnected, value);
     }
 
     public PageItemsViewModel<PublishItemViewModel> Items { get; } = new();
