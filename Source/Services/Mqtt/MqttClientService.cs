@@ -224,7 +224,10 @@ public sealed class MqttClientService
         {
             var offset = item.SignalGeneratorPeriod.TotalSeconds * item.SignalGeneratorPhase / 100;
             double v = ((offset + now.ToUnixTimeSeconds()) % item.SignalGeneratorPeriod.TotalSeconds) / item.SignalGeneratorPeriod.TotalSeconds * (item.SignalGeneratorMax - item.SignalGeneratorMin) + item.SignalGeneratorMin;
-            signalValue = (v > (item.SignalGeneratorMax + item.SignalGeneratorMin) / 2 ? item.SignalGeneratorMax : item.SignalGeneratorMin).ToString();
+
+            double cutoff = ((item.SignalGeneratorMax - item.SignalGeneratorMin) / 2.0);
+            int flipped = (v > cutoff ? item.SignalGeneratorMax : item.SignalGeneratorMin);
+            signalValue = flipped.ToString();
         }
         else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Triangle)
         {
@@ -240,7 +243,7 @@ public sealed class MqttClientService
         else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.WeightedRandom)
         {
             int range = item.SignalGeneratorMax - item.SignalGeneratorMin;
-            double v = Math.Round(range / (((Random.NextDouble() * 2) - 1) * range) + ((item.SignalGeneratorMin + item.SignalGeneratorMax) / 2));
+            double v = Math.Round(range / (((Random.NextDouble() * 2.0) - 1) * range) + ((item.SignalGeneratorMin + item.SignalGeneratorMax) / 2));
             signalValue = v.ToString();
         }
         else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Wanderer)
@@ -249,7 +252,7 @@ public sealed class MqttClientService
             var increment = randomDirection > 0.666 ? item.SignalGeneratorPhase : randomDirection > 0.333 ? 0 : -item.SignalGeneratorPhase;
             if (!double.TryParse(item.LastSignalValue, out var previous))
             {
-                previous = (item.SignalGeneratorMax - item.SignalGeneratorMin) / 2;
+                previous = (item.SignalGeneratorMax - item.SignalGeneratorMin) / 2.0;
             }
             var next = previous + increment;
             double v = Math.Clamp(next, item.SignalGeneratorMin, item.SignalGeneratorMax);
@@ -362,19 +365,11 @@ public sealed class MqttClientService
         return await _mqttClient.UnsubscribeAsync(subscriptionItem.Topic).ConfigureAwait(false);
     }
 
-    async Task OnApplicationMessageReceived(MqttApplicationMessageReceivedEventArgs eventArgs)
+    Task OnApplicationMessageReceived(MqttApplicationMessageReceivedEventArgs eventArgs)
     {
         Interlocked.Increment(ref _receivedMessagesCount);
 
-        // We have to insert a small delay here because this is an UI application. If we
-        // have no delay the application will freeze as soon as there is much traffic.
-        await Task.Delay(50);
-        await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-            },
-            DispatcherPriority.Render);
-
-        await _applicationMessageReceivedEvent.InvokeAsync(eventArgs);
+        return _applicationMessageReceivedEvent.InvokeAsync(eventArgs);
     }
 
     Task OnConnected(MqttClientConnectedEventArgs eventArgs)
@@ -401,12 +396,11 @@ public sealed class MqttClientService
     {
         foreach (var messageInspector in _messageInspectors)
         {
-            messageInspector.Invoke(eventArgs).GetAwaiter().GetResult();
+            messageInspector.Invoke(eventArgs);
 
             // We have to insert a sleep here to make sure that the UI remains responsive.
-            Thread.Sleep(25);
+            Task.Delay(25);
         }
-
         return Task.CompletedTask;
     }
 
