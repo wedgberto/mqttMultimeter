@@ -368,11 +368,12 @@ public sealed class MqttClientService
 
         // We have to insert a small delay here because this is an UI application. If we
         // have no delay the application will freeze as soon as there is much traffic.
-        await Task.Delay(50);
-        await Dispatcher.UIThread.InvokeAsync(() =>
+        Task.WaitAll(
+            Task.Delay(50),
+            Dispatcher.UIThread.InvokeAsync(() =>
             {
             },
-            DispatcherPriority.Render);
+            DispatcherPriority.Render).GetTask());
 
         await _applicationMessageReceivedEvent.InvokeAsync(eventArgs);
     }

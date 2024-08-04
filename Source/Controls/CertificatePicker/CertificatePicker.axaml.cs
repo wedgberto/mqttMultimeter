@@ -56,7 +56,7 @@ public sealed class CertificatePicker : TemplatedControl
 
     void OnPickButtonClicked(object? sender, RoutedEventArgs e)
     {
-        Dispatcher.UIThread.InvokeAsync(async () =>
+        Dispatcher.UIThread.Post(async () =>
         {
             var filePickerOptions = new FilePickerOpenOptions
             {

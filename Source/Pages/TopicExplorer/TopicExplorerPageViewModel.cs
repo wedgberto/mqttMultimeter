@@ -113,7 +113,7 @@ public sealed class TopicExplorerPageViewModel : BasePageViewModel
 
         OverlayContent = ProgressIndicatorViewModel.Create($"Deleting retained message...\r\n\r\n{item.Topic}");
 
-        Dispatcher.UIThread.InvokeAsync(async () =>
+        Dispatcher.UIThread.Post(async () =>
         {
             try
             {
@@ -206,7 +206,8 @@ public sealed class TopicExplorerPageViewModel : BasePageViewModel
             return Task.CompletedTask;
         }
 
-        return Dispatcher.UIThread.InvokeAsync(() => InsertNode(arguments.ApplicationMessage)).GetTask();
+        Dispatcher.UIThread.Post(() => InsertNode(arguments.ApplicationMessage));
+        return Task.CompletedTask;
     }
 
     static void SetExpandedState(TopicExplorerTreeNodeViewModel node, bool value)

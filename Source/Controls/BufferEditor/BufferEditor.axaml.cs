@@ -196,7 +196,7 @@ public sealed class BufferEditor : TemplatedControl
 
     void OnLoadFromFile(object? sender, RoutedEventArgs e)
     {
-        Dispatcher.UIThread.InvokeAsync(async () =>
+        Dispatcher.UIThread.Post(async () =>
         {
             var filePickerOptions = new FilePickerOpenOptions
             {
@@ -255,7 +255,7 @@ public sealed class BufferEditor : TemplatedControl
 
     void OnSaveToFile(object? sender, RoutedEventArgs e)
     {
-        Dispatcher.UIThread.InvokeAsync(async () =>
+        Dispatcher.UIThread.Post(async () =>
         {
             try
             {

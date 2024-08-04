@@ -51,7 +51,7 @@ public sealed partial class TopicExplorerTreeNodeView : UserControl
 
             treeViewItem.Classes.Add("highlight");
 
-            Dispatcher.UIThread.InvokeAsync(async () =>
+            Dispatcher.UIThread.Post(async () =>
             {
                 await Task.Delay(TimeSpan.FromSeconds(1.5));
 
