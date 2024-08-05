@@ -26,7 +26,7 @@ static class Program
         
         if (Debugger.IsAttached)
         {
-            appBuilder = appBuilder.LogToTrace();
+            appBuilder = appBuilder.LogToTrace(Avalonia.Logging.LogEventLevel.Debug, Avalonia.Logging.LogArea.Binding, Avalonia.Logging.LogArea.Visual);
         }
 
         return appBuilder;
