@@ -25,7 +25,7 @@ public sealed class PublishPageViewModel : BasePageViewModel
             Payload = "{\"value\": 1.0}",
         };
         Items.Collection.Add(item);
-        Items.SelectedItem = item; 
+        Items.SelectedItem = item;
     }
 
     public PublishPageViewModel(MqttClientService mqttClientService, StateService stateService)
@@ -51,6 +51,25 @@ public sealed class PublishPageViewModel : BasePageViewModel
         };
     }
 
+    private bool _isAllStarted;
+
+    public bool IsAllStarted
+    {
+        get => _isAllStarted;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _isAllStarted, value);
+            if (_isAllStarted)
+            {
+                StartAll();
+            }
+            else
+            {
+                StopAll();
+            }
+        }
+    }
+
     public bool IsConnected
     {
         get => _isConnected;
@@ -72,6 +91,107 @@ public sealed class PublishPageViewModel : BasePageViewModel
 
         Items.Collection.Add(newItem);
         Items.SelectedItem = newItem;
+    }
+
+    public void CopyItem()
+    {
+        int numberOfDigitsAtEnd = 0;
+        for (var i = this.Items.SelectedItem.Topic.Length - 1; i >= 0; i--)
+        {
+            if (!char.IsDigit(this.Items.SelectedItem.Topic[i]))
+            {
+                break;
+            }
+
+            numberOfDigitsAtEnd++;
+        }
+
+        var result = this.Items.SelectedItem.Topic[^numberOfDigitsAtEnd..];
+        if (int.TryParse(result, out var topicSeq))
+        {
+            topicSeq++;
+        }
+        else
+        {
+            topicSeq = 1;
+        }
+
+        var newItem = new PublishItemViewModel(this)
+        {
+            ContentType = this.Items.SelectedItem.ContentType,
+            Name = this.Items.SelectedItem.Name + " (copy)",
+            MessageExpiryInterval = this.Items.SelectedItem.MessageExpiryInterval,
+            Payload = this.Items.SelectedItem.Payload,
+            PayloadFormat = this.Items.SelectedItem.PayloadFormat,
+            PayloadFormatIndicator =
+            {
+                Value = this.Items.SelectedItem.PayloadFormatIndicator.Value,
+            },
+            QualityOfServiceLevel =
+            {
+                Value = this.Items.SelectedItem.QualityOfServiceLevel.Value,
+            },
+            ResponseTopic = this.Items.SelectedItem.ResponseTopic,
+            Retain = this.Items.SelectedItem.Retain,
+            SignalGeneratorInterval = this.Items.SelectedItem.SignalGeneratorInterval,
+            SignalGeneratorMin = this.Items.SelectedItem.SignalGeneratorMin,
+            SignalGeneratorMax = this.Items.SelectedItem.SignalGeneratorMax,
+            SignalGeneratorPeriod = this.Items.SelectedItem.SignalGeneratorPeriod,
+            SignalGeneratorPhase = this.Items.SelectedItem.SignalGeneratorPhase,
+            SignalGeneratorType =
+            {
+                Value = this.Items.SelectedItem.SignalGeneratorType.Value,
+            },
+            SubscriptionIdentifier = this.Items.SelectedItem.SubscriptionIdentifier,
+            Topic = this.Items.SelectedItem.Topic.Substring(0, this.Items.SelectedItem.Topic.Length - numberOfDigitsAtEnd) + topicSeq,
+            TopicAlias = this.Items.SelectedItem.TopicAlias,
+        };
+
+        foreach (var userProperty in this.Items.SelectedItem.UserProperties.Items)
+        {
+            newItem.UserProperties.AddItem(userProperty.Name ?? string.Empty, userProperty.Value ?? string.Empty);
+        }
+
+        // Prepare the UI with at lest one user property.
+        // It will not be send when the name is empty.
+        if (newItem.UserProperties.Items.Count == 0)
+        {
+            newItem.UserProperties.AddEmptyItem();
+        }
+
+        Items.Collection.Add(newItem);
+        Items.SelectedItem = newItem;
+    }
+
+
+    public void StartAll()
+    {
+        try
+        {
+            foreach (var item in Items.Collection)
+            {
+                item.StartSignalGeneration();
+            }
+        }
+        catch (Exception exception)
+        {
+            App.ShowException(exception);
+        }
+    }
+
+    public void StopAll()
+    {
+        try
+        {
+            foreach (var item in Items.Collection)
+            {
+                item.StopSignalGeneration();
+            }
+        }
+        catch (Exception exception)
+        {
+            App.ShowException(exception);
+        }
     }
 
     public async Task PublishItem(PublishItemViewModel item)

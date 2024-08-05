@@ -75,7 +75,7 @@
                           AutoScrollToSelectedItem="False"
                           SelectionMode="Single"
                           x:Name="PART_Items"
-                          SelectedItem="{CompiledBinding SelectedNode, Mode=TwoWay}"
+                          SelectedItem="{CompiledBinding SelectedNode, Mode=OneWay}"
                           ItemsSource="{CompiledBinding Nodes, Mode=OneTime}"
                           Grid.Column="0">
                     <TreeView.ItemTemplate>

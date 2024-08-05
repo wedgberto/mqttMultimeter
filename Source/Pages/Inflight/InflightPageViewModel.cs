@@ -82,7 +82,7 @@ public sealed class InflightPageViewModel : BasePageViewModel
             throw new ArgumentNullException(nameof(message));
         }
 
-        return Dispatcher.UIThread.InvokeAsync(() =>
+        Dispatcher.UIThread.Post(() =>
             {
                 var newItem = CreateItemViewModel(message);
 
@@ -93,8 +93,8 @@ public sealed class InflightPageViewModel : BasePageViewModel
                 {
                     _itemsSource.RemoveAt(0);
                 }
-            })
-            .GetTask();
+            });
+        return Task.CompletedTask;
     }
 
     public void ClearItems()
@@ -160,7 +160,7 @@ public sealed class InflightPageViewModel : BasePageViewModel
         var item = (InflightPageItemViewModel)sender!;
         OverlayContent = ProgressIndicatorViewModel.Create($"Deleting retained message...\r\n\r\n{item.Topic}");
 
-        Dispatcher.UIThread.InvokeAsync(async () =>
+        Dispatcher.UIThread.Post(async () =>
         {
             try
             {

@@ -36,7 +36,7 @@ public sealed partial class InflightPageView : UserControl
 
     void OnExportItems(object? _, RoutedEventArgs __)
     {
-        Dispatcher.UIThread.InvokeAsync(async () =>
+        Dispatcher.UIThread.Post(async () =>
         {
             try
             {
@@ -67,7 +67,7 @@ public sealed partial class InflightPageView : UserControl
 
     void OnImportItems(object? _, RoutedEventArgs __)
     {
-        Dispatcher.UIThread.InvokeAsync(async () =>
+        Dispatcher.UIThread.Post(async () =>
         {
             try
             {

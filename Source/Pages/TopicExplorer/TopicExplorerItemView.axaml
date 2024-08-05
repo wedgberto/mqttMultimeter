@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:topicExplorer="clr-namespace:mqttMultimeter.Pages.TopicExplorer"
              xmlns:converters="clr-namespace:mqttMultimeter.Converters"
@@ -35,7 +35,7 @@
         <!-- Messages -->
         <DataGrid Grid.Row="1"
                   ItemsSource="{CompiledBinding Messages, Mode=OneTime}"
-                  SelectedItem="{CompiledBinding SelectedMessage, Mode=TwoWay}"
+                  SelectedItem="{CompiledBinding SelectedMessage, Mode=OneWay}"
                   Margin="0,0,0,10">
             <DataGrid.Columns>
 
