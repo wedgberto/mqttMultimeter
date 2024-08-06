@@ -224,7 +224,9 @@ public sealed class MqttClientService
         {
             var offset = item.SignalGeneratorPeriod.TotalSeconds * item.SignalGeneratorPhase / 100;
             double v = ((offset + now.ToUnixTimeSeconds()) % item.SignalGeneratorPeriod.TotalSeconds) / item.SignalGeneratorPeriod.TotalSeconds * (item.SignalGeneratorMax - item.SignalGeneratorMin) + item.SignalGeneratorMin;
-            signalValue = (v > (item.SignalGeneratorMax + item.SignalGeneratorMin) / 2 ? item.SignalGeneratorMax : item.SignalGeneratorMin).ToString();
+            double cutoff = ((item.SignalGeneratorMax - item.SignalGeneratorMin) / 2.0);
+            int flipped = (v > cutoff ? item.SignalGeneratorMax : item.SignalGeneratorMin);
+            signalValue = flipped.ToString();
         }
         else if (item.SignalGeneratorType.Value == Controls.SignalGeneratorType.SignalGeneratorTypeEnum.Triangle)
         {
