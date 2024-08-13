@@ -3,7 +3,7 @@
              xmlns:publish="clr-namespace:mqttMultimeter.Pages.Publish"
              xmlns:controls="clr-namespace:mqttMultimeter.Controls"
              Design.Width="800"
-             Design.Height="450"
+             Design.Height="700"
              x:Class="mqttMultimeter.Pages.Publish.PublishPageView">
   <Design.DataContext>
     <publish:PublishPageViewModel />

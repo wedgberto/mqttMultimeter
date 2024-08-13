@@ -4,8 +4,8 @@
              xmlns:publish="clr-namespace:mqttMultimeter.Pages.Publish"
              xmlns:converters="clr-namespace:mqttMultimeter.Converters"
              xmlns:controls="clr-namespace:mqttMultimeter.Controls"
-             Design.Height="600"
              Design.Width="800"
+             Design.Height="700"
              x:DataType="publish:PublishItemViewModel">
   <Design.DataContext>
     <publish:PublishItemViewModel />
@@ -220,7 +220,7 @@
         </TabItem>
 
         <TabItem Header="Signal Generation">
-          <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+          <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
                 ColumnDefinitions="Auto,*,Auto">
 
             <!-- The signal type -->
@@ -332,35 +332,77 @@
                        Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
                        Classes="note">The phase of the cycle of the generator (%).</TextBlock>
 
-            <TextBlock
-              Grid.Row="6"
-              Grid.Column="0">
-              Payload placeholders
-            </TextBlock>
-            <Grid Grid.Row="6"
-                        Grid.Column="1"
-                               ColumnDefinitions="*,*,*,*">
+            <Label Grid.Row="6"
+                   Grid.Column="0"
+                   Classes="caption"
+                   Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                   Content="Quantity" />
+            <NumericUpDown Grid.Column="1"
+                           Grid.Row="6"
+                           Classes="value code_text"
+                           IsEnabled="{CompiledBinding SignalGeneratorType.HasWave, Mode=OneWay}"
+                           Minimum="1"
+                           Maximum="1000"
+                           Value="{CompiledBinding Quantity, Mode=TwoWay}}" />
 
-              <TextBlock Grid.Column="0" HorizontalAlignment="Right">
-                {Value}
+            <TextBlock
+              Grid.Row="7"
+              Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+              Grid.Column="0">
+              Message template
+            </TextBlock>
+            <Grid Grid.Row="7"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="2"
+                  ColumnDefinitions="*,*,*,*,*,*">
+
+              <TextBlock
+                Grid.Column="0"
+                Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                HorizontalAlignment="Right">
+                Topic #
+              </TextBlock>
+              <TextBlock
+                Grid.Column="1"
+                Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                IsVisible="{CompiledBinding HasTopicTemplate}">
+                ✔
               </TextBlock>
               <TextBlock Grid.Column="1"
-                IsVisible="{CompiledBinding HasPayloadValueTemplate}">
-                 ✔
-              </TextBlock>
-              <TextBlock Grid.Column="1"
-                IsVisible="{CompiledBinding !HasPayloadValueTemplate}">
+                Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                IsVisible="{CompiledBinding !HasTopicTemplate}">
                 ❌
               </TextBlock>
-              <TextBlock Grid.Column="2" HorizontalAlignment="Right">
-                {Timestamp}
+              <TextBlock
+                Grid.Column="2"
+                Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                HorizontalAlignment="Right">
+                Payload {Value}
               </TextBlock>
               <TextBlock Grid.Column="3"
-              IsVisible="{CompiledBinding HasPayloadTimespanTemplate}">
+                Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                IsVisible="{CompiledBinding HasPayloadValueTemplate}">
                 ✔
               </TextBlock>
               <TextBlock Grid.Column="3"
-              IsVisible="{CompiledBinding !HasPayloadTimespanTemplate}">
+                Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                IsVisible="{CompiledBinding !HasPayloadValueTemplate}">
+                ❌
+              </TextBlock>
+              <TextBlock 
+                Grid.Column="4" 
+                Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                HorizontalAlignment="Right">
+                {Timestamp}
+              </TextBlock>
+              <TextBlock Grid.Column="5"
+                Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                IsVisible="{CompiledBinding HasPayloadTimespanTemplate}">
+                ✔
+              </TextBlock>
+              <TextBlock Grid.Column="5"
+                Classes.disabled="{CompiledBinding !SignalGeneratorType.HasWave, Mode=OneWay}"
+                IsVisible="{CompiledBinding !HasPayloadTimespanTemplate}">
                 ❌
               </TextBlock>
             </Grid>

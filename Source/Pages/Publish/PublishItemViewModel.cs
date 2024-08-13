@@ -1,12 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Avalonia.Data;
-using DynamicData.Binding;
+﻿using Avalonia.Data;
 using mqttMultimeter.Common;
 using mqttMultimeter.Controls;
-using mqttMultimeter.Pages.Connection;
 using ReactiveUI;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace mqttMultimeter.Pages.Publish;
 
@@ -22,6 +20,7 @@ public sealed class PublishItemViewModel : BaseViewModel
     TimeSpan _period = TimeSpan.FromSeconds(1.5);
     ushort _phase = 0;
     BufferFormat _payloadFormat;
+    int _quantity = 1;
     string? _responseTopic;
     bool _retain;
     uint _subscriptionIdentifier;
@@ -29,6 +28,7 @@ public sealed class PublishItemViewModel : BaseViewModel
     ushort _topicAlias;
     bool _canStart;
     bool _isGenerating;
+    bool _hasTopicTemplate;
     bool _hasPayloadValueTemplate;
     bool _hasPayloadTimespanTemplate;
     readonly Timer _timer;
@@ -39,6 +39,7 @@ public sealed class PublishItemViewModel : BaseViewModel
         Payload = "Demo Payload";
         LastSignalTimestamp = DateTimeOffset.Now.ToString("O");
         LastSignalValue = "0.0";
+        Quantity = 1;
     }
 
     public PublishItemViewModel(PublishPageViewModel ownerPage)
@@ -70,12 +71,19 @@ public sealed class PublishItemViewModel : BaseViewModel
 
         this.Changed.Subscribe(o =>
         {
-            if (o.PropertyName == nameof(Payload))
+            if (o.Sender is PublishItemViewModel viewModel)
             {
-                if (o.Sender is PublishItemViewModel viewModel)
+                switch (o.PropertyName)
                 {
-                    this.HasPayloadValueTemplate = viewModel.Payload.Contains("{Value}");
-                    this.HasPayloadTimespanTemplate = viewModel.Payload.Contains("{Timestamp}");
+                    case nameof(Topic):
+                        this.HasTopicTemplate = viewModel.Topic.AsSpan().Count("#") == 1;
+                        break;
+                    case nameof(Payload):
+                        this.HasPayloadValueTemplate = viewModel.Payload.Contains("{Value}");
+                        this.HasPayloadTimespanTemplate = viewModel.Payload.Contains("{Timestamp}");
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -114,6 +122,12 @@ public sealed class PublishItemViewModel : BaseViewModel
     {
         get => _isGenerating;
         private set => this.RaiseAndSetIfChanged(ref _isGenerating, value);
+    }
+
+    public bool HasTopicTemplate
+    {
+        get => _hasTopicTemplate;
+        set => this.RaiseAndSetIfChanged(ref _hasTopicTemplate, value);
     }
 
     public bool HasPayloadValueTemplate
@@ -158,6 +172,12 @@ public sealed class PublishItemViewModel : BaseViewModel
     {
         get => _name;
         set => this.RaiseAndSetIfChanged(ref _name, value);
+    }
+
+    public int Quantity
+    {
+        get => _quantity;
+        set => this.RaiseAndSetIfChanged(ref _quantity, value);
     }
 
     public PublishPageViewModel OwnerPage { get; }

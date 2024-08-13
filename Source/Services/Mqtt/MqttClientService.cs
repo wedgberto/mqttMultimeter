@@ -198,7 +198,7 @@ public sealed class MqttClientService
         return _mqttClient!.PublishAsync(message, cancellationToken);
     }
 
-    public Task<MqttClientPublishResult> Publish(PublishItemViewModel item)
+    public Task Publish(PublishItemViewModel item)
     {
         if (item == null)
         {
@@ -279,7 +279,7 @@ public sealed class MqttClientService
             throw new NotSupportedException();
         }
 
-        var applicationMessageBuilder = new MqttApplicationMessageBuilder().WithTopic(item.Topic)
+        var applicationMessageBuilder = new MqttApplicationMessageBuilder().WithTopic("#")
             .WithQualityOfServiceLevel(item.QualityOfServiceLevel.Value)
             .WithRetainFlag(item.Retain)
             .WithMessageExpiryInterval(item.MessageExpiryInterval)
@@ -308,7 +308,25 @@ public sealed class MqttClientService
 
         item.UpdateLastSignalValue(signalValue, payloadTimestamp);
 
-        return _mqttClient!.PublishAsync(applicationMessageBuilder.Build());
+        var message = applicationMessageBuilder.Build();
+
+        var awaitables = new List<Task>();
+
+        return Parallel.ForAsync(1, item.Quantity + 1, async (i, cancellationToken) =>
+        {
+            message.Topic = item.Topic?.Replace("#", i.ToString());
+
+            _ = _mqttClient!.PublishAsync(message);
+
+        });
+
+        //for (int i = 1; i < item.Quantity + 1; i++)
+        //{
+        //    message.Topic = item.Topic?.Replace("#", i.ToString());
+
+        //    awaitables.Add(_mqttClient!.PublishAsync(message));
+        //};
+        //return Task.WhenAll(awaitables);
     }
 
     public void RegisterMessageInspectorHandler(Func<InspectMqttPacketEventArgs, Task> handler)
@@ -370,12 +388,12 @@ public sealed class MqttClientService
 
         // We have to insert a small delay here because this is an UI application. If we
         // have no delay the application will freeze as soon as there is much traffic.
-        await Task.WhenAll(
-            Task.Delay(50),
-            Dispatcher.UIThread.InvokeAsync(() =>
-            {
-            },
-            DispatcherPriority.Render).GetTask());
+        //await Task.WhenAll(
+        //    Task.Delay(5),
+        //    Dispatcher.UIThread.InvokeAsync(() =>
+        //    {
+        //    },
+        //    DispatcherPriority.Render).GetTask());
 
         await _applicationMessageReceivedEvent.InvokeAsync(eventArgs);
     }

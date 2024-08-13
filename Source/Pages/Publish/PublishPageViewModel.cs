@@ -171,7 +171,6 @@ public sealed class PublishPageViewModel : BasePageViewModel
         Items.SelectedItem = newItem;
     }
 
-
     public void StartAll()
     {
         try
@@ -206,8 +205,7 @@ public sealed class PublishPageViewModel : BasePageViewModel
     {
         try
         {
-            var response = await _mqttClientService.Publish(item);
-            item.Response.ApplyResponse(response);
+            await _mqttClientService.Publish(item);
         }
         catch (Exception exception)
         {
