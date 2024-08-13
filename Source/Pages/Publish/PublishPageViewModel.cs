@@ -59,6 +59,7 @@ public sealed class PublishPageViewModel : BasePageViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _isAllStarted, value);
+            this.RaisePropertyChanged(nameof(StartAllButtonTooltip));
             if (_isAllStarted)
             {
                 StartAll();
@@ -69,6 +70,13 @@ public sealed class PublishPageViewModel : BasePageViewModel
             }
         }
     }
+
+    public void ToggleAllStarted()
+    {
+        IsAllStarted = !IsAllStarted;
+    }
+
+    public string StartAllButtonTooltip => $"{(_isAllStarted ? "Stop" : "Start")} all signal generators";
 
     public bool IsConnected
     {

@@ -37,19 +37,21 @@
           <Button ToolTip.Tip="Copy publish item"
                   Classes="tool_bar_button"
                   Command="{Binding CopyItem}">
-            <PathIcon Data="{StaticResource copy_regular}" />
+            <PathIcon Data="{StaticResource copy_add_regular}" />
           </Button>
           <Button ToolTip.Tip="Remove all publish items"
                   Classes="tool_bar_button"
                   Command="{Binding  Items.Clear}">
             <PathIcon Data="{StaticResource delete_regular}" />
           </Button>
-          <ToggleButton ToolTip.Tip="Start all signal generator items"
+          <Button ToolTip.Tip="{Binding StartAllButtonTooltip}"
                   Classes="tool_bar_button"
-                  IsChecked="{Binding IsAllStarted}"
-                  >
-            <PathIcon Data="{StaticResource arrow_repeat_all_regular}" />
-          </ToggleButton>
+                  Command="{Binding ToggleAllStarted}">
+            <Panel>
+              <PathIcon IsVisible="{Binding !IsAllStarted}" Data="{StaticResource arrow_repeat_all_regular}"/>
+              <PathIcon IsVisible="{Binding IsAllStarted}" Data="{StaticResource arrow_repeat_all_off_regular}" />
+            </Panel>
+          </Button>
         </StackPanel>
 
         <ListBox Background="Transparent"
