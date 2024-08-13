@@ -34,9 +34,18 @@
                         <PathIcon Data="{StaticResource add_square_regular}" />
                     </Button>
                     <Button ToolTip.Tip="Remove all connection items"
-                            Classes="tool_bar_button"
-                            Command="{Binding Items.Clear}">
+                            Classes="tool_bar_button">
                         <PathIcon Data="{StaticResource delete_regular}" />
+                        <Button.Flyout>
+                          <MenuFlyout >
+                            <MenuItem Header="Permanently remove all connection items"
+                                      Command="{Binding Items.Clear}">
+                              <MenuItem.Icon>
+                                <PathIcon Data="{StaticResource delete_regular}" />
+                              </MenuItem.Icon>
+                            </MenuItem>
+                          </MenuFlyout>
+                        </Button.Flyout>
                     </Button>
                 </StackPanel>
 

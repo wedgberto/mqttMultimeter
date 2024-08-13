@@ -40,9 +40,18 @@
             <PathIcon Data="{StaticResource copy_add_regular}" />
           </Button>
           <Button ToolTip.Tip="Remove all publish items"
-                  Classes="tool_bar_button"
-                  Command="{Binding  Items.Clear}">
+                  Classes="tool_bar_button">
             <PathIcon Data="{StaticResource delete_regular}" />
+            <Button.Flyout>
+              <MenuFlyout >
+                <MenuItem Header="Permanently remove all publish items"
+                          Command="{Binding Items.Clear}">
+                  <MenuItem.Icon>
+                    <PathIcon Data="{StaticResource delete_regular}" />
+                  </MenuItem.Icon>
+                </MenuItem>
+              </MenuFlyout>
+            </Button.Flyout>
           </Button>
           <Button ToolTip.Tip="{Binding StartAllButtonTooltip}"
                   Classes="tool_bar_button"

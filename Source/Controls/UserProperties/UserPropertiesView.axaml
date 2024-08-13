@@ -23,9 +23,18 @@
                     <PathIcon Data="{StaticResource add_square_regular}" />
                 </Button>
                 <Button Classes="tool_bar_button"
-                        ToolTip.Tip="Remove all user properties"
-                        Command="{Binding ClearItems}">
+                        ToolTip.Tip="Remove all user properties">
                     <PathIcon Data="{StaticResource delete_regular}" />
+                    <Button.Flyout>
+                      <MenuFlyout >
+                        <MenuItem Header="Permanently remove all user properties"
+                                  Command="{Binding ClearItems}">
+                          <MenuItem.Icon>
+                            <PathIcon Data="{StaticResource delete_regular}" />
+                          </MenuItem.Icon>
+                        </MenuItem>
+                      </MenuFlyout>
+                    </Button.Flyout>
                 </Button>
             </StackPanel>
 
