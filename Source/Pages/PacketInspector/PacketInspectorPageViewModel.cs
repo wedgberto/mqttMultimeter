@@ -15,6 +15,7 @@ public sealed class PacketInspectorPageViewModel : BasePageViewModel
     bool _isRecordingEnabled;
     int _number;
     PacketViewModel? _selectedPacket;
+    private MqttClientService mqttClientService;
 
     public PacketInspectorPageViewModel()
     {
@@ -37,14 +38,25 @@ public sealed class PacketInspectorPageViewModel : BasePageViewModel
         {
             throw new ArgumentNullException(nameof(mqttClientService));
         }
+        this.mqttClientService = mqttClientService;
 
-        mqttClientService.RegisterMessageInspectorHandler(ProcessPacket);
     }
 
     public bool IsRecordingEnabled
     {
         get => _isRecordingEnabled;
-        set => this.RaiseAndSetIfChanged(ref _isRecordingEnabled, value);
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _isRecordingEnabled, value);
+            if (value)
+            {
+                mqttClientService.RegisterMessageInspectorHandler(ProcessPacket);
+            }
+            else
+            {
+                mqttClientService.UnregisterMessageInspectorHandler(ProcessPacket);
+            }
+        }
     }
 
     public ObservableCollection<PacketViewModel> Packets { get; } = new();

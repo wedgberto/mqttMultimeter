@@ -158,8 +158,6 @@ public sealed class MqttClientService
 
         _mqttClient.ApplicationMessageReceivedAsync += OnApplicationMessageReceived;
 
-        // TODO: Attach and detach packet inspection on demand (internal overhead in MQTTnet library)!
-        _mqttClient.InspectPacketAsync += OnInspectPacket;
         _mqttClient.ConnectedAsync += OnConnected;
         _mqttClient.DisconnectedAsync += OnDisconnected;
 
@@ -336,8 +334,27 @@ public sealed class MqttClientService
             throw new ArgumentNullException(nameof(handler));
         }
 
+        if (_mqttClient != null)
+        {
+            _mqttClient.InspectPacketAsync += OnInspectPacket;
+        }
         _messageInspectors.Add(handler);
     }
+
+    public void UnregisterMessageInspectorHandler(Func<InspectMqttPacketEventArgs, Task> handler)
+    {
+        if (handler == null)
+        {
+            throw new ArgumentNullException(nameof(handler));
+        }
+
+        if (_mqttClient != null)
+        {
+            _mqttClient.InspectPacketAsync -= OnInspectPacket;
+        }
+        _messageInspectors.Remove(handler);
+    }
+
 
     public async Task<MqttClientSubscribeResult> Subscribe(SubscriptionItemViewModel subscriptionItem)
     {
@@ -418,17 +435,12 @@ public sealed class MqttClientService
         return Task.CompletedTask;
     }
 
-    Task OnInspectPacket(InspectMqttPacketEventArgs eventArgs)
+    async Task OnInspectPacket(InspectMqttPacketEventArgs eventArgs)
     {
         foreach (var messageInspector in _messageInspectors)
         {
-            messageInspector.Invoke(eventArgs).GetAwaiter().GetResult();
-
-            // We have to insert a sleep here to make sure that the UI remains responsive.
-            Thread.Sleep(25);
+            await messageInspector.Invoke(eventArgs);
         }
-
-        return Task.CompletedTask;
     }
 
     void OnLogMessagePublished(object? sender, MqttNetLogMessagePublishedEventArgs e)
