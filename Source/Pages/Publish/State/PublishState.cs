@@ -23,6 +23,8 @@ public sealed class PublishState
 
     public MqttQualityOfServiceLevel QualityOfServiceLevel { get; set; }
 
+    public int Quantity { get; set; }
+
     public string? ResponseTopic { get; set; }
 
     public bool Retain { get; set; }
@@ -46,4 +48,5 @@ public sealed class PublishState
     public TimeSpan SignalGeneratorPeriod { get; set; }
 
     public ushort SignalGeneratorPhase { get; set; }
+
 }

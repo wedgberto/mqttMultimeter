@@ -28,6 +28,7 @@ public static class PublishPageStateFactory
                 MessageExpiryInterval = item.MessageExpiryInterval,
                 PayloadFormatIndicator = item.PayloadFormatIndicator.Value,
                 QualityOfServiceLevel = item.QualityOfServiceLevel.Value,
+                Quantity = item.Quantity,
                 Payload = item.Payload,
                 SignalGeneratorType = item.SignalGeneratorType.Value,
                 SignalGeneratorInterval = item.SignalGeneratorInterval,

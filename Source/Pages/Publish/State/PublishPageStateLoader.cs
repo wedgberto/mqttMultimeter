@@ -45,6 +45,7 @@ public static class PublishPageStateLoader
             {
                 Value = publishState.QualityOfServiceLevel
             },
+            Quantity = publishState.Quantity,
             SignalGeneratorType = {
                 Value = publishState.SignalGeneratorType
             },
