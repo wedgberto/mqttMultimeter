@@ -140,7 +140,7 @@
                     </Border>
 
                     <inflight:InflightPageItemView Grid.Row="1"
-                                                   DataContext="{CompiledBinding SelectedItem}" />
+                                                   DataContext="{CompiledBinding SelectedItem, Mode=OneWay}" />
 
                 </Grid>
             </Grid>
