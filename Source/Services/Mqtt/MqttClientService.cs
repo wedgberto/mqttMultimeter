@@ -222,7 +222,7 @@ public sealed class MqttClientService
         {
             var offset = item.SignalGeneratorPeriod.TotalSeconds * item.SignalGeneratorPhase / 100;
             double v = ((offset + now.ToUnixTimeSeconds()) % item.SignalGeneratorPeriod.TotalSeconds) / item.SignalGeneratorPeriod.TotalSeconds * (item.SignalGeneratorMax - item.SignalGeneratorMin) + item.SignalGeneratorMin;
-            double cutoff = ((item.SignalGeneratorMax - item.SignalGeneratorMin) / 2.0);
+            double cutoff = ((item.SignalGeneratorMax + item.SignalGeneratorMin) / 2.0);
             int flipped = (v > cutoff ? item.SignalGeneratorMax : item.SignalGeneratorMin);
             signalValue = flipped.ToString();
         }
@@ -308,23 +308,13 @@ public sealed class MqttClientService
 
         var message = applicationMessageBuilder.Build();
 
-        var awaitables = new List<Task>();
-
         return Parallel.ForAsync(1, item.Quantity + 1, async (i, cancellationToken) =>
         {
             message.Topic = item.Topic?.Replace("#", i.ToString());
 
-            _ = _mqttClient!.PublishAsync(message);
+            _ = _mqttClient!.PublishAsync(message).ContinueWith(async response => item.Response.ApplyResponse(await response));
 
         });
-
-        //for (int i = 1; i < item.Quantity + 1; i++)
-        //{
-        //    message.Topic = item.Topic?.Replace("#", i.ToString());
-
-        //    awaitables.Add(_mqttClient!.PublishAsync(message));
-        //};
-        //return Task.WhenAll(awaitables);
     }
 
     public void RegisterMessageInspectorHandler(Func<InspectMqttPacketEventArgs, Task> handler)
@@ -405,14 +395,13 @@ public sealed class MqttClientService
 
         // We have to insert a small delay here because this is an UI application. If we
         // have no delay the application will freeze as soon as there is much traffic.
-        //await Task.WhenAll(
-        //    Task.Delay(5),
-        //    Dispatcher.UIThread.InvokeAsync(() =>
-        //    {
-        //    },
-        //    DispatcherPriority.Render).GetTask());
-
-        await _applicationMessageReceivedEvent.InvokeAsync(eventArgs);
+        await Task.WhenAll(
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                return Task.CompletedTask;
+            },
+            DispatcherPriority.Render),
+            _applicationMessageReceivedEvent.InvokeAsync(eventArgs));
     }
 
     Task OnConnected(MqttClientConnectedEventArgs eventArgs)

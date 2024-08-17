@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using mqttMultimeter.Common;
 using mqttMultimeter.Services.Mqtt;
-using MQTTnet.Diagnostics;
 using MQTTnet.Diagnostics.PacketInspection;
 using ReactiveUI;
+using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace mqttMultimeter.Pages.PacketInspector;
 
@@ -39,7 +38,6 @@ public sealed class PacketInspectorPageViewModel : BasePageViewModel
             throw new ArgumentNullException(nameof(mqttClientService));
         }
         this.mqttClientService = mqttClientService;
-
     }
 
     public bool IsRecordingEnabled
