@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using mqttMultimeter.Services.Data;
@@ -59,13 +60,19 @@ public sealed class StateService(JsonSerializerService jsonSerializerService)
         return false;
     }
 
-    public async Task Write()
+    public async Task Write(string? key = null)
     {
         Saving?.Invoke(this, new SavingStateEventArgs(this));
 
+        var states = _state;
+        if (!string.IsNullOrEmpty(key) && states.ContainsKey(key))
+        {
+            states = states.Where(s => s.Key == key).ToDictionary(); 
+        }
+
         // The state is written into multiple files so that editing and debugging gets
         // easier. So the files can be opened with VSCode etc. for analysis.
-        foreach (var state in _state)
+        foreach (var state in states)
         {
             var path = Path.Combine(GeneratePath(), state.Key + ".json");
             Debug.WriteLine("Writing state to \'{Path}\'", path);

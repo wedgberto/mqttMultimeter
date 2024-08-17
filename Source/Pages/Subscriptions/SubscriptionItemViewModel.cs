@@ -15,6 +15,12 @@ public sealed class SubscriptionItemViewModel : BaseViewModel
     public SubscriptionItemViewModel(SubscriptionsPageViewModel ownerPage)
     {
         OwnerPage = ownerPage;
+        this.PropertyChanged += SubscriptionItemViewModel_PropertyChanged;
+    }
+
+    private void SubscriptionItemViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        return;
     }
 
     public string Name
