@@ -14,6 +14,7 @@ using MQTTnet.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Security;
 using System.Reactive;
 using System.Security.Authentication;
@@ -196,7 +197,7 @@ public sealed class MqttClientService
         return _mqttClient!.PublishAsync(message, cancellationToken);
     }
 
-    public Task Publish(PublishItemViewModel item)
+    public async Task Publish(PublishItemViewModel item)
     {
         if (item == null)
         {
@@ -307,14 +308,14 @@ public sealed class MqttClientService
         item.UpdateLastSignalValue(signalValue, payloadTimestamp);
 
         var message = applicationMessageBuilder.Build();
+        var format = "D" + item.Quantity.ToString().Length;
 
-        return Parallel.ForAsync(1, item.Quantity + 1, async (i, cancellationToken) =>
+        for (int i = 1; i < item.Quantity + 1; i++)
         {
-            message.Topic = item.Topic?.Replace("#", i.ToString());
+            message.Topic = item.Topic?.Replace("#", i.ToString(format));
 
-            _ = _mqttClient!.PublishAsync(message).ContinueWith(async response => item.Response.ApplyResponse(await response));
-
-        });
+            await _mqttClient!.PublishAsync(message).ContinueWith(async response => item.Response.ApplyResponse(await response));
+        }
     }
 
     public void RegisterMessageInspectorHandler(Func<InspectMqttPacketEventArgs, Task> handler)
